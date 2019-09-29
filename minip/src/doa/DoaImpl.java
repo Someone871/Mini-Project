@@ -101,4 +101,42 @@ public class DoaImpl implements DoaInterface{
 		
 		return customer;
 	}
+	
+	@Override
+	public void addCustomer(Customer customer,String username,String password) {
+		try {
+			// Insert Customer details into Customer table  
+			
+			String sql = "INSERT INTO customer(fullname,address,area,mobno,email) VALUES ('"+customer.getFullname()+"','"+customer.getAddress()+"','"+customer.getArea()+"','"+customer.getMobno()+"','"+customer.getEmail()+"')";
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			System.out.println(sql);
+			// Retrieve last-inserted customer id from database 
+			sql = "SELECT LAST_INSERT_ID() AS last";
+			System.out.println(sql);
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.beforeFirst();
+			resultSet.next();
+			int id = resultSet.getInt("last");
+			
+			System.out.println(id);
+			
+			// Insert id,username, password into CustomerLogin table
+			sql = "INSERT INTO customerlogin VALUES('"+username+"','"+password+"','"+id+"')";
+			System.out.println(sql);
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			System.out.println(sql);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

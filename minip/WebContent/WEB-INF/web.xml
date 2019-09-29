@@ -14,6 +14,7 @@
     <servlet-name>LoginContoller</servlet-name>
     <url-pattern>/LoginContoller</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <description></description>
     <display-name>CustomerController</display-name>
@@ -24,4 +25,16 @@
     <servlet-name>CustomerController</servlet-name>
     <url-pattern>/CustomerController</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>CustomerSignup</display-name>
+    <servlet-name>CustomerSignup</servlet-name>
+    <servlet-class>controllers.CustomerSignup</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomerSignup</servlet-name>
+    <url-pattern>/CustomerSignup</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
