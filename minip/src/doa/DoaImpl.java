@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 import dbConnection.DBConnection;
 import entities.Customer;
+import entities.DeliveryExecutive;
 
 public class DoaImpl implements DoaInterface{
 	
@@ -76,33 +77,6 @@ public class DoaImpl implements DoaInterface{
 	}
 	
 	@Override
-	public Customer getCustomerProfile(int id) {
-		Customer customer = null;
-		
-		try {
-			String sql = "SELECT * FROM Customer WHERE cust_id='"+id+"'";
-			connection=DBConnection.openConnection();
-			preparedStatement = connection.prepareStatement(sql);
-			resultSet = preparedStatement.executeQuery();
-			
-			customer=new Customer();
-			customer.setCust_id(id);
-			customer.setFullname(resultSet.getString("fullname"));
-			customer.setAddress(resultSet.getString("address"));
-			customer.setArea(resultSet.getString("area"));
-			customer.setMobno(resultSet.getString("mobno"));
-			customer.setEmail(resultSet.getString("email"));
-			
-			return customer;
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return customer;
-	}
-	
-	@Override
 	public void addCustomer(Customer customer,String username,String password) {
 		try {
 			// Insert Customer details into Customer table  
@@ -136,7 +110,68 @@ public class DoaImpl implements DoaInterface{
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+		}	
+	}
+	
+	@Override
+	public Customer getCustomerProfile(int id) {
+		try {
+			String sql = "SELECT * FROM Customer WHERE cust_id="+id;
+			
+			System.out.println(sql);
+			
+			connection=DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			
+			resultSet.beforeFirst();
+			resultSet.next();
+			
+			Customer customer=new Customer();
+			customer.setCust_id(id);
+			customer.setFullname(resultSet.getString("fullname"));
+			customer.setAddress(resultSet.getString("address"));
+			customer.setArea(resultSet.getString("area"));
+			customer.setMobno(resultSet.getString("mobno"));
+			customer.setEmail(resultSet.getString("email"));
+			
+			return customer;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
 		}
 		
+		return null;
 	}
+	
+	@Override
+	public DeliveryExecutive getDeliveryExecutiveProfile(int id) {
+		
+		try {
+			String sql="SELECT * FROM DeliveryExecutive where emp_id="+id;
+			connection=DBConnection.openConnection();
+			preparedStatement=connection.prepareStatement(sql);
+			resultSet=preparedStatement.executeQuery();
+			
+			System.out.println(sql);
+			
+			DeliveryExecutive deliveryexecutive = new DeliveryExecutive();
+			deliveryexecutive.setEmp_id(id);
+			
+			resultSet.beforeFirst();
+			resultSet.next();
+			
+			deliveryexecutive.setEmpName(resultSet.getString("EmpName"));
+			deliveryexecutive.setWorkZone(resultSet.getString("WorkZone"));
+			deliveryexecutive.setEmpMobNo(resultSet.getString("EmpMobNo"));
+			
+			return deliveryexecutive;
+			
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		return null;
+}
+	
 }

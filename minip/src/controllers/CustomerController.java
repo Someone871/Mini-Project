@@ -21,9 +21,10 @@ public class CustomerController extends HttpServlet {
     }
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
-		String str_id = request.getParameter("id");
-		int id = Integer.parseInt(str_id);
+		String action = (String) request.getAttribute("action");
+		int id = (int) request.getAttribute("id");
+		
+		System.out.println("In Servlet\t"+id);
 		
 		Customer customer = userdoa.getCustomerProfile(id);
 		
