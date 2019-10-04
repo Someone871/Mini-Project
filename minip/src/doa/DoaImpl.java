@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import dbConnection.DBConnection;
 import entities.Chef;
@@ -17,6 +19,29 @@ public class DoaImpl implements DoaInterface{
 	Statement statement=null;
 	ResultSet resultSet=null;
 	PreparedStatement preparedStatement=null;
+	
+	@Override
+	public String getZone(String area) {
+		
+		try{
+			String sql = "SELECT Zone FROM Location WHERE Area = '"+area+"'";
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			
+			resultSet.beforeFirst();
+			resultSet.next();
+			
+			String Zone = resultSet.getString("Zone");
+			
+			return Zone;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 	
 	@Override
 	public int checkuser(String username, String password, String usertype) {
@@ -173,7 +198,46 @@ public class DoaImpl implements DoaInterface{
 			ex.printStackTrace();
 		}
 		return null;
-}
+	}
+	
+	@Override
+	public List<Chef> getPotentialOrders(int id) {
+		
+		List<Chef> list = null;
+		Customer customer = getCustomerProfile(id);
+		Chef chef = null;
+		
+		try {
+			list = new ArrayList<Chef>();
+			
+			String sql = "SELECT * FROM Chef WHERE ( NumAvl>0 AND Zone='"+getZone(customer.getArea())+"')";
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			
+			resultSet.beforeFirst();
+			while(resultSet.next()) {
+				chef = new Chef();
+				chef.setChef_id(resultSet.getInt("chef_id"));
+				chef.setname(resultSet.getString("fullname"));
+				chef.setAddress(resultSet.getString("address"));
+				chef.setArea(resultSet.getString("area"));
+				chef.setMobno(resultSet.getString("mobno"));
+				chef.setCuisine(resultSet.getString("cuisine"));
+				chef.setNumAvl(resultSet.getInt("NumAvl"));
+				chef.setUnitCost(resultSet.getInt("UnitCost"));
+				chef.setTiffinDesc(resultSet.getString("TiffinDesc"));
+				
+				list.add(chef);
+			}
+		}
+		
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	@Override
 	public Chef getChefProfile(int id) {
