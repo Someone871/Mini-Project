@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import dbConnection.DBConnection;
+import entities.Chef;
 import entities.Customer;
 import entities.DeliveryExecutive;
 
@@ -25,11 +26,11 @@ public class DoaImpl implements DoaInterface{
 			System.out.println("\nDetails Received :: "+username+"\t"+password+"\t"+usertype+"\n");
 			
 			if(usertype.equals("chef"))
-				sql = "SELECT * FROM cheflogin WHERE username='"+username+"' AND password='"+password+"'";
+				sql = "SELECT * FROM ChefLogin WHERE username='"+username+"' AND password='"+password+"'";
 			else if(usertype.equals("cust"))
-				sql = "SELECT * FROM customerlogin WHERE username='"+username+"' AND password='"+password+"'";
+				sql = "SELECT * FROM CustomerLogin WHERE username='"+username+"' AND password='"+password+"'";
 			else
-				sql = "SELECT * FROM emplogin WHERE username='"+username+"' AND password='"+password+"'";
+				sql = "SELECT * FROM EmpLogin WHERE username='"+username+"' AND password='"+password+"'";
 			
 			System.out.println(sql);
 			
@@ -81,7 +82,7 @@ public class DoaImpl implements DoaInterface{
 		try {
 			// Insert Customer details into Customer table  
 			
-			String sql = "INSERT INTO customer(fullname,address,area,mobno,email) VALUES ('"+customer.getFullname()+"','"+customer.getAddress()+"','"+customer.getArea()+"','"+customer.getMobno()+"','"+customer.getEmail()+"')";
+			String sql = "INSERT INTO Customer(fullname,address,area,mobno,email) VALUES ('"+customer.getFullname()+"','"+customer.getAddress()+"','"+customer.getArea()+"','"+customer.getMobno()+"','"+customer.getEmail()+"')";
 			connection = DBConnection.openConnection();
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.executeUpdate();
@@ -100,7 +101,7 @@ public class DoaImpl implements DoaInterface{
 			System.out.println(id);
 			
 			// Insert id,username, password into CustomerLogin table
-			sql = "INSERT INTO customerlogin VALUES('"+username+"','"+password+"','"+id+"')";
+			sql = "INSERT INTO CustomerLogin VALUES('"+username+"','"+password+"','"+id+"')";
 			System.out.println(sql);
 			connection = DBConnection.openConnection();
 			preparedStatement = connection.prepareStatement(sql);
@@ -173,5 +174,64 @@ public class DoaImpl implements DoaInterface{
 		}
 		return null;
 }
+
+	@Override
+	public Chef getChefProfile(int id) {
+		
+		try {
+			String sql="SELECT * FROM Chef where chef_id="+id;
+			connection=DBConnection.openConnection();
+			preparedStatement=connection.prepareStatement(sql);
+			resultSet=preparedStatement.executeQuery();
+			
+			System.out.println(sql);
+			
+			Chef chef = new Chef();
+			chef.setChef_id(id);
+			
+			resultSet.beforeFirst();
+			resultSet.next();
+			
+			chef.setName(resultSet.getString("fullname"));
+			chef.setAddress(resultSet.getString("address"));
+			chef.setMobno(resultSet.getString("mobno"));
+			
+			return chef;
+			
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void updateMenu(Chef chef) {
+		
+		try {
+			String sql="UPDATE Chef SET "
+					+ "cuisine = ? ,"
+					+ "NumAvl = ? ,"
+					+ "UnitCost = ? ,"
+					+ "TiffinDesc = ? "
+					+ "WHERE chef_id = ?";
+			
+			System.out.println(sql);
+			
+			connection=DBConnection.openConnection();
+			preparedStatement=connection.prepareStatement(sql);
+			preparedStatement.setString(1,chef.getCuisine());
+			preparedStatement.setInt(2,chef.getNumAvl());
+			preparedStatement.setInt(3,chef.getUnitCost());
+			preparedStatement.setString(4,chef.getTiffinDesc());
+			preparedStatement.setInt(5,chef.getChef_id());
+			
+			preparedStatement.executeUpdate();
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
 	
 }

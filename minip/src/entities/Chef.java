@@ -9,6 +9,13 @@ public class Chef {
 	private Integer NumAvl;
 	private Integer UnitCost;
 	private String TiffinDesc;
+	private String Name;
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
 	public Integer getChef_id() {
 		return chef_id;
 	}

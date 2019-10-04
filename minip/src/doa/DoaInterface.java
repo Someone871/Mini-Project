@@ -1,5 +1,6 @@
 package doa;
 
+import entities.Chef;
 import entities.Customer;
 import entities.DeliveryExecutive;
 
@@ -11,4 +12,8 @@ public interface DoaInterface {
 	void addCustomer(Customer customer,String username,String password);
 	
 	DeliveryExecutive getDeliveryExecutiveProfile(int id);
+	
+	Chef getChefProfile(int id);
+	
+	void updateMenu(Chef chef);
 }

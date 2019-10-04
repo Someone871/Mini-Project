@@ -49,8 +49,8 @@ public class CustomerSignup extends HttpServlet {
 		
 		userdoa.addCustomer(customer, username, password);
 		
-		//RequestDispatcher dispatcher = request.getRequestDispatcher("Login.html");
-		//dispatcher.forward(request, response);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Login.html");
+		dispatcher.forward(request, response);
 		
 	}
 
