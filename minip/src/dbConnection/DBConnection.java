@@ -9,7 +9,7 @@ public class DBConnection {
 	
 	private static final String url = "jdbc:mysql://localhost:3306/minip";
 	
-	private static final String username = "Shaunak";
+	private static final String username = "root";
 	
 	private static final String password = "root";
 	
