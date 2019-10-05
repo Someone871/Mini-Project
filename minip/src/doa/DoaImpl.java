@@ -3,18 +3,20 @@ package doa;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import dbConnection.DBConnection;
 import entities.Chef;
+import entities.ChefCustomer;
 import entities.Customer;
 import entities.DeliveryExecutive;
 
 public class DoaImpl implements DoaInterface{
-	
 	/*-------------------------- GET ZONE FROM AREA --------------------------*/
+
 	@Override
 	public String getZone(String area) {
 		Connection connection=null;
@@ -214,12 +216,12 @@ public class DoaImpl implements DoaInterface{
 	/*------------------------------------------- SHOW TIFFINS THE CUSTOMER CAN ORDER ----------------------------------------*/
 	@Override
 	public List<Chef> getPotentialOrders(int id) {
+		System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
+		
 		Connection connection=null;
 		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
-		
-		System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
 		
 		List<Chef> list = null;
 		Customer customer = getCustomerProfile(id);
@@ -333,4 +335,65 @@ public class DoaImpl implements DoaInterface{
 		}
 	}
 	
+
+
+	@Override
+	public List<ChefCustomer> getOrderInfo(int id) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		//int count=0;
+		List<ChefCustomer> list=null;
+			
+		try {
+			
+			list=new ArrayList<ChefCustomer>();   //create an array list to add customer and chef details
+
+			String sql1="SELECT * FROM OrderInfo WHERE emp_id="+id+" and status='C' ";
+			System.out.println(sql1);
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql1);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.beforeFirst();
+//			resultSet.next();
+			//int count=resultSet.getInt(1);
+	
+			while(resultSet.next())
+			{
+				//getting chef_id,cust_id 
+				int chef_id = resultSet.getInt("chef_id");
+				int cust_id = resultSet.getInt("cust_id");
+				
+				ChefCustomer chefcustomerinfo=new ChefCustomer();
+				
+				
+				Customer customer = getCustomerProfile(cust_id); //get customer profile 
+				Chef chef = getChefProfile(chef_id);             //get chef profile
+				
+				
+				//from customer profile pull name,address and mobno
+				chefcustomerinfo.setCustomerId(cust_id);
+				chefcustomerinfo.setCustomerName(customer.getFullname());
+				chefcustomerinfo.setCustomerAddress(customer.getAddress());
+				chefcustomerinfo.setCustomerMobNo(customer.getMobno());
+		
+				//from chef profile pull name,address and mobno
+				chefcustomerinfo.setChefId(chef_id);
+				chefcustomerinfo.setChefName(chef.getName());
+				chefcustomerinfo.setChefAddress(chef.getAddress());
+				chefcustomerinfo.setChefMobNo(chef.getMobno());
+				
+				
+				
+				list.add(chefcustomerinfo);
+				
+				}
+		}catch(SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return list;
+	}
 }
