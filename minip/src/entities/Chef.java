@@ -16,9 +16,6 @@ public class Chef {
 	public void setName(String name) {
 		Name = name;
 	}
-	public String getname() {
-		return Name;
-	}
 	public void setname(String name) {
 		this.Name = name;
 	}

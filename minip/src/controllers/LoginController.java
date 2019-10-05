@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import doa.DoaImpl;
 import doa.DoaInterface;
 
-public class LoginContoller extends HttpServlet {
+public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	DoaInterface userdoa;
 	
-    public LoginContoller() {
+    public LoginController() {
     	userdoa = new DoaImpl();
     }
 

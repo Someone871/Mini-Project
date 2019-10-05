@@ -14,24 +14,20 @@ import entities.DeliveryExecutive;
 
 public class DoaImpl implements DoaInterface{
 	
-	//define the properties
-	Connection connection=null;
-	Statement statement=null;
-	ResultSet resultSet=null;
-	PreparedStatement preparedStatement=null;
-	
+	/*-------------------------- GET ZONE FROM AREA --------------------------*/
 	@Override
 	public String getZone(String area) {
-		
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try{
 			String sql = "SELECT Zone FROM Location WHERE Area = '"+area+"'";
 			connection = DBConnection.openConnection();
 			preparedStatement = connection.prepareStatement(sql);
-			resultSet = preparedStatement.executeQuery();
-			
+			resultSet = preparedStatement.executeQuery();			
 			resultSet.beforeFirst();
 			resultSet.next();
-			
 			String Zone = resultSet.getString("Zone");
 			
 			return Zone;
@@ -43,8 +39,13 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 	
+	/*-------------------------- CHECK USER LOGIN AND RETURN ID --------------------------*/
 	@Override
 	public int checkuser(String username, String password, String usertype) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try {
 			String sql = new String();
 			
@@ -63,11 +64,6 @@ public class DoaImpl implements DoaInterface{
 			
 			preparedStatement = connection.prepareStatement(sql);
 			resultSet = preparedStatement.executeQuery();
-			
-			//statement = connection.createStatement();
-			
-			//resultSet = statement.executeQuery(sql);
-			
 			if(!resultSet.next()) {
 				return -1;
 			}
@@ -102,8 +98,13 @@ public class DoaImpl implements DoaInterface{
 		return -1;
 	}
 	
+	/*------------------------------------ CUSTOMER SIGNUP --------------------------------------------*/
 	@Override
 	public void addCustomer(Customer customer,String username,String password) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try {
 			// Insert Customer details into Customer table  
 			
@@ -139,8 +140,13 @@ public class DoaImpl implements DoaInterface{
 		}	
 	}
 	
+	/*---------------------------------------- RETURN CUSTOMER PROFILE FROM ID ------------------------------------------*/
 	@Override
 	public Customer getCustomerProfile(int id) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try {
 			String sql = "SELECT * FROM Customer WHERE cust_id="+id;
 			
@@ -170,8 +176,13 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 	
+	/*----------------------------------------- RETURN DELIVER EXECUTIVE PROFILE -------------------------------------*/
 	@Override
 	public DeliveryExecutive getDeliveryExecutiveProfile(int id) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		
 		try {
 			String sql="SELECT * FROM DeliveryExecutive where emp_id="+id;
@@ -200,8 +211,15 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 	
+	/*------------------------------------------- SHOW TIFFINS THE CUSTOMER CAN ORDER ----------------------------------------*/
 	@Override
 	public List<Chef> getPotentialOrders(int id) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		
+		System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
 		
 		List<Chef> list = null;
 		Customer customer = getCustomerProfile(id);
@@ -210,11 +228,12 @@ public class DoaImpl implements DoaInterface{
 		try {
 			list = new ArrayList<Chef>();
 			
-			String sql = "SELECT * FROM Chef WHERE ( NumAvl>0 AND Zone='"+getZone(customer.getArea())+"')";
+			String sql = "SELECT * FROM Chef WHERE ( NumAvl>0 AND (SELECT Zone from location where area=Chef.area)='"+getZone(customer.getArea())+"')";
+			System.out.println(sql);
 			connection = DBConnection.openConnection();
 			preparedStatement = connection.prepareStatement(sql);
 			resultSet = preparedStatement.executeQuery();
-			
+			int i=0;
 			resultSet.beforeFirst();
 			while(resultSet.next()) {
 				chef = new Chef();
@@ -227,20 +246,29 @@ public class DoaImpl implements DoaInterface{
 				chef.setNumAvl(resultSet.getInt("NumAvl"));
 				chef.setUnitCost(resultSet.getInt("UnitCost"));
 				chef.setTiffinDesc(resultSet.getString("TiffinDesc"));
-				
+				i++;
 				list.add(chef);
+				
+				System.out.println(chef.getChef_id());
 			}
+			System.out.println("\nI = = "+i);
+			
+			return list;
 		}
-		
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
 
+	/*-------------------------- RETURN CHEF PROFILE FROM ID --------------------------*/
 	@Override
 	public Chef getChefProfile(int id) {
+		
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		
 		try {
 			String sql="SELECT * FROM Chef where chef_id="+id;
@@ -273,6 +301,11 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public void updateMenu(Chef chef) {
 		
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		
 		try {
 			String sql="UPDATE Chef SET "
 					+ "cuisine = ? ,"
@@ -290,6 +323,8 @@ public class DoaImpl implements DoaInterface{
 			preparedStatement.setInt(3,chef.getUnitCost());
 			preparedStatement.setString(4,chef.getTiffinDesc());
 			preparedStatement.setInt(5,chef.getChef_id());
+			
+			//preparedStatement.setBigDecimal(arg0, arg1);
 			
 			preparedStatement.executeUpdate();
 		}catch(Exception ex)
