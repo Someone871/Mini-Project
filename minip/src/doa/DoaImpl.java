@@ -3,26 +3,25 @@ package doa;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import dbConnection.DBConnection;
 import entities.Chef;
+import entities.ChefCustomer;
 import entities.Customer;
 import entities.DeliveryExecutive;
 
 public class DoaImpl implements DoaInterface{
 	
-	//define the properties
-	Connection connection=null;
-	Statement statement=null;
-	ResultSet resultSet=null;
-	PreparedStatement preparedStatement=null;
-	
 	@Override
 	public String getZone(String area) {
-		
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try{
 			String sql = "SELECT Zone FROM Location WHERE Area = '"+area+"'";
 			connection = DBConnection.openConnection();
@@ -45,6 +44,10 @@ public class DoaImpl implements DoaInterface{
 	
 	@Override
 	public int checkuser(String username, String password, String usertype) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try {
 			String sql = new String();
 			
@@ -104,6 +107,10 @@ public class DoaImpl implements DoaInterface{
 	
 	@Override
 	public void addCustomer(Customer customer,String username,String password) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try {
 			// Insert Customer details into Customer table  
 			
@@ -141,6 +148,10 @@ public class DoaImpl implements DoaInterface{
 	
 	@Override
 	public Customer getCustomerProfile(int id) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		try {
 			String sql = "SELECT * FROM Customer WHERE cust_id="+id;
 			
@@ -172,6 +183,10 @@ public class DoaImpl implements DoaInterface{
 	
 	@Override
 	public DeliveryExecutive getDeliveryExecutiveProfile(int id) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		
 		try {
 			String sql="SELECT * FROM DeliveryExecutive where emp_id="+id;
@@ -202,6 +217,11 @@ public class DoaImpl implements DoaInterface{
 	
 	@Override
 	public List<Chef> getPotentialOrders(int id) {
+		
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
 		
 		List<Chef> list = null;
 		Customer customer = getCustomerProfile(id);
@@ -242,6 +262,11 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public Chef getChefProfile(int id) {
 		
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		
 		try {
 			String sql="SELECT * FROM Chef where chef_id="+id;
 			connection=DBConnection.openConnection();
@@ -273,6 +298,11 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public void updateMenu(Chef chef) {
 		
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		
 		try {
 			String sql="UPDATE Chef SET "
 					+ "cuisine = ? ,"
@@ -297,5 +327,72 @@ public class DoaImpl implements DoaInterface{
 			ex.printStackTrace();
 		}
 	}
+	
+
+
+	@Override
+	public List<ChefCustomer> getOrderInfo(int id) {
+		Connection connection=null;
+		Statement statement=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		//int count=0;
+		List<ChefCustomer> list=null;
+			
+		try {
+			
+			list=new ArrayList<ChefCustomer>();   //create an array list to add customer and chef details
+
+			String sql1="SELECT * FROM OrderInfo WHERE emp_id="+id+" and status='C' ";
+			System.out.println(sql1);
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql1);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.beforeFirst();
+//			resultSet.next();
+			//int count=resultSet.getInt(1);
+	
+			while(resultSet.next())
+			{
+				//getting chef_id,cust_id 
+				int chef_id = resultSet.getInt("chef_id");
+				int cust_id = resultSet.getInt("cust_id");
+				
+				ChefCustomer chefcustomerinfo=new ChefCustomer();
+				
+				
+				Customer customer = getCustomerProfile(cust_id); //get customer profile 
+				Chef chef = getChefProfile(chef_id);             //get chef profile
+				
+				
+				//from customer profile pull name,address and mobno
+				chefcustomerinfo.setCustomerId(cust_id);
+				chefcustomerinfo.setCustomerName(customer.getFullname());
+				chefcustomerinfo.setCustomerAddress(customer.getAddress());
+				chefcustomerinfo.setCustomerMobNo(customer.getMobno());
+		
+				//from chef profile pull name,address and mobno
+				chefcustomerinfo.setChefId(chef_id);
+				chefcustomerinfo.setChefName(chef.getname());
+				chefcustomerinfo.setChefAddress(chef.getAddress());
+				chefcustomerinfo.setChefMobNo(chef.getMobno());
+				
+				
+				
+				list.add(chefcustomerinfo);
+				
+				}
+			
+				
+		
+		}catch(SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return list;
+	} 
+
+	
 	
 }
