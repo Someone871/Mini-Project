@@ -6,6 +6,7 @@ import entities.Chef;
 import entities.ChefCustomer;
 import entities.Customer;
 import entities.DeliveryExecutive;
+import entities.Order;
 
 public interface DoaInterface {
 	String getZone(String area);
@@ -22,5 +23,11 @@ public interface DoaInterface {
 	Chef getChefProfile(int id);
 	void updateMenu(Chef chef);
 	List<Chef> getPotentialOrders(int id);
+	
+	List<Order> getPendingOrders(int id);
+	
+	List<Order> getAcceptedOrders(int id);
+	
+	void acceptOrder(int id);
 	
 }

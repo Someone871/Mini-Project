@@ -16,6 +16,21 @@ Mobile no: ${Mobno}<br>
 </p>
 <br>
 <%session.setAttribute("Chef_id",request.getAttribute("Chef_id")); %>
-<a href="SetMenu.jsp">Set Menu</a>
+<input type="hidden" name="id" value="${Chef_id}">
+<form action="SetMenu.jsp">
+	<input type="hidden" name="action" value="ViewOrderRequests">
+	<input type = "submit" value="Set Menu">
+</form>
+<br>
+<form action="ChefController" method="post">
+	<input type="hidden" name="action" value="ViewOrderRequests">
+	<input type = "submit" value="View Pending Requests">
+</form>
+<br>
+<form action="ChefController" method="post">
+	<input type="hidden" name="action" value="ViewAcceptedOrders">
+	<input type = "submit" value="View Accepted Requests">
+</form>
+
 </body>
 </html>
