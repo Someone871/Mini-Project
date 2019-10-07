@@ -380,10 +380,7 @@ public class DoaImpl implements DoaInterface{
 			ex.printStackTrace();
 		}		
 		return list;
-	}
-	
-<<<<<<< HEAD
-	
+	}	
 	
 	@Override
 	public int insertOrder(int id, int chef_id, int NumOrdered, int total_cost) {
@@ -443,7 +440,9 @@ public class DoaImpl implements DoaInterface{
 		catch(Exception e) {
 			e.printStackTrace();
 			return -1;
-=======
+		}
+	}
+	
 	@Override
 	public List<Order> getPendingOrders(int id) {
 		Connection connection=null;
@@ -522,7 +521,6 @@ public class DoaImpl implements DoaInterface{
 			preparedStatement.executeUpdate();
 		} catch(Exception ex) {
 			ex.printStackTrace();
->>>>>>> branch 'master' of https://github.com/Someone871/Mini-Project.git
 		}
 	}
 }

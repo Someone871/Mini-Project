@@ -36,6 +36,7 @@ for(int i=0;i<list.size();i++)
 	info=list.get(i);
 	
 %>	
+
 <tr>
 			<td><%=info.getChefName() %></td>
 			 <td><%=info.getChefAddress() %></td> 

@@ -24,14 +24,11 @@ public interface DoaInterface {
 	void updateMenu(Chef chef);
 	List<Chef> getPotentialOrders(int id);
 	
-<<<<<<< HEAD
 	int insertOrder(int id,int chef_id,int NumOrdered,int total_cost);
-=======
 	List<Order> getPendingOrders(int id);
 	
 	List<Order> getAcceptedOrders(int id);
 	
 	void acceptOrder(int id);
->>>>>>> branch 'master' of https://github.com/Someone871/Mini-Project.git
 	
 }
