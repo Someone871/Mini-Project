@@ -31,6 +31,7 @@ Mobile no: ${Mobno}<br>
 	<input type="hidden" name="action" value="ViewAcceptedOrders">
 	<input type = "submit" value="View Accepted Requests">
 </form>
-
+<br><br>
+<a href="Login.html">Logout</a>
 </body>
 </html>

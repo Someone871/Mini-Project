@@ -70,6 +70,7 @@
 
 </div>
 
-
+<br><br>
+<a href="Login.html">Logout</a>
 </body>
 </html>

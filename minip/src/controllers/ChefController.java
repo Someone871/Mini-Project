@@ -84,13 +84,6 @@ public class ChefController extends HttpServlet {
 			request.getRequestDispatcher("ChefController").forward(request, response);
 		}
 		else if(action.equals("ViewOrderRequests")) {
-			
-			//int id = Integer.parseInt(request.getParameter("id"));
-			/*List<Order> orders = new ArrayList<Order>();
-			orders = chefdoa.getPendingOrders(id);
-			request.setAttribute("id", id);
-			request.setAttribute("orders", orders);
-			request.getRequestDispatcher("PendingOrders.jsp").forward(request, response);*/
 			viewOrderRequests(request,response);
 		}
 		else if(action.equals("ViewAcceptedOrders")) {
