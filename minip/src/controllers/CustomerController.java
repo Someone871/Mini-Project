@@ -46,17 +46,26 @@ public class CustomerController extends HttpServlet {
 		
 		System.out.println("Action :: "+action);
 		
+		/* Perform the required operation acc. to values of "action" */
+		/*
+		switch(action) {
+			case("order_food"):{
+				
+			}
+				
+		}
+		*/
 		if(action.equals("order_food")) {
-			// Forward request to OrderFood.jsp
+			// Get list of chefs the customer can order from
 			List <Chef> list = userdoa.getPotentialOrders(id);
+			// Set 'id' and 'list' attribute
 			request.setAttribute("id", id);
-			System.out.println("Dispatching to OrderFood.jsp");
 			request.setAttribute("list", list);
+			System.out.println("Dispatching to OrderFood.jsp");
+			// Forward request to OrderFood.jsp
 			request.getRequestDispatcher("OrderFood.jsp").forward(request, response);;
 		}
 		else if(action.equals("show_profile")){
-			// Forward request to CustomerProfile.jsp
-			
 			// Get customer profile and save in Customer object
 			Customer customer = userdoa.getCustomerProfile(id);
 			
@@ -72,14 +81,15 @@ public class CustomerController extends HttpServlet {
 			System.out.println(" Email - ID :: "+customer.getEmail());
 			System.out.println(" Area :: "+customer.getArea());
 			System.out.println("Dispatching to CustomerProfile.jsp");
+			
+			// Forward request to CustomerProfile.jsp
 			request.getRequestDispatcher("CustomerProfile.jsp").forward(request, response);;
 		}
-		else {
+		else if(action.equals("AddOrder")) {
 			// Action = AddOrder
-			// Forward request to ConfirmOrder.jsp
-			/* Attributes Received :-
-			 * id, chef_id, TiffinDesc, UnitCost, NumAvl 
-			 * */
+			// Attributes Received :-
+			// id, chef_id, TiffinDesc, UnitCost, NumAvl 
+			
 			int chef_id = Integer.parseInt(request.getParameter("chef_id"));
 			String TiffinDesc = request.getParameter("TiffinDesc");
 			int UnitCost = Integer.parseInt(request.getParameter("UnitCost"));
@@ -90,9 +100,28 @@ public class CustomerController extends HttpServlet {
 			
 			System.out.println("\nForwarding to ConfirmOrder.jsp");
 			
-			request.setAttribute("cust_id", id);
+			request.setAttribute("id", id);
 			request.setAttribute("chef_id", chef_id);
-			//request.getRequestDispatcher("ConfirmOrder.jsp").forward(request, response);
+			request.setAttribute("TiffinDesc", TiffinDesc);
+			request.setAttribute("UnitCost", UnitCost);
+			request.setAttribute("NumAvl", NumAvl);
+			
+			// Forward request to ConfirmOrder.jsp
+			request.getRequestDispatcher("ConfirmOrder.jsp").forward(request, response);
+		}
+		else{
+			// action = ConfirmOrder
+			// Attributes Received :- 
+			// id , chef_id, NumOrdered, UnitCost
+			
+			int chef_id = Integer.parseInt(request.getParameter("chef_id"));
+			int UnitCost = Integer.parseInt(request.getParameter("UnitCost"));
+			int NumOrdered = Integer.parseInt(request.getParameter("NumOrdered"));
+			int total_cost = UnitCost * NumOrdered;
+			
+			int order_id = userdoa.insertOrder(id, chef_id, NumOrdered, total_cost);
+			
+			System.out.println("Order ID :: "+order_id);
 			
 		}
 	}

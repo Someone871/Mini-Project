@@ -24,6 +24,7 @@ public interface DoaInterface {
 	void updateMenu(Chef chef);
 	List<Chef> getPotentialOrders(int id);
 	
+	int insertOrder(int id,int chef_id,int NumOrdered,int total_cost);
 	List<Order> getPendingOrders(int id);
 	
 	List<Order> getAcceptedOrders(int id);
