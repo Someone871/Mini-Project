@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import entities.Chef;
 import entities.ChefCustomer;
 import entities.Customer;
 import entities.DeliveryExecutive;
+import entities.Order;
 
 public class DoaImpl implements DoaInterface{
 	/*-------------------------- GET ZONE FROM AREA --------------------------*/
@@ -224,7 +224,7 @@ public class DoaImpl implements DoaInterface{
 		try {
 			list = new ArrayList<Chef>();
 			
-			String sql = "SELECT * FROM Chef WHERE ( NumAvl>0 AND (SELECT Zone from location where area=Chef.area)='"+getZone(customer.getArea())+"')";
+			String sql = "SELECT * FROM Chef WHERE ( NumAvl>0 AND (SELECT Zone from Location where area=Chef.area)='"+getZone(customer.getArea())+"')";
 			System.out.println(sql);
 			connection = DBConnection.openConnection();
 			preparedStatement = connection.prepareStatement(sql);
@@ -382,6 +382,7 @@ public class DoaImpl implements DoaInterface{
 		return list;
 	}
 	
+<<<<<<< HEAD
 	
 	
 	@Override
@@ -442,6 +443,86 @@ public class DoaImpl implements DoaInterface{
 		catch(Exception e) {
 			e.printStackTrace();
 			return -1;
+=======
+	@Override
+	public List<Order> getPendingOrders(int id) {
+		Connection connection=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		List<Order> orders = new ArrayList<Order>();
+		try {
+			
+			String sql = "SELECT * FROM OrderInfo WHERE chef_id = "+id+" AND status = 'W'";
+			connection=DBConnection.openConnection();
+			preparedStatement=connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				Order order = new Order();
+				
+				order.setOrder_id(resultSet.getInt("order_id"));
+				order.setCust_id(resultSet.getInt("cust_id"));
+				order.setChef_id(resultSet.getInt("chef_id"));
+				order.setEmp_id(resultSet.getInt("emp_id"));
+				order.setStatus(resultSet.getString("status"));
+				order.setTotal_cost(resultSet.getInt("total_cost"));
+				order.setNumOrdered(resultSet.getInt("NumOrdered"));
+				orders.add(order);
+			}
+			
+			return orders;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Order> getAcceptedOrders(int id) {
+		Connection connection=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		List<Order> orders = new ArrayList<Order>();
+		try {
+			
+			String sql = "SELECT * FROM OrderInfo WHERE chef_id = "+id+" AND status = 'C'";
+			connection=DBConnection.openConnection();
+			preparedStatement=connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				Order order = new Order();
+				
+				order.setOrder_id(resultSet.getInt("order_id"));
+				order.setCust_id(resultSet.getInt("cust_id"));
+				order.setChef_id(resultSet.getInt("chef_id"));
+				order.setEmp_id(resultSet.getInt("emp_id"));
+				order.setStatus(resultSet.getString("status"));
+				order.setTotal_cost(resultSet.getInt("total_cost"));
+				order.setNumOrdered(resultSet.getInt("NumOrdered"));
+				orders.add(order);
+			}
+			
+			return orders;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public void acceptOrder(int id) {
+		Connection connection=null;
+		PreparedStatement preparedStatement=null;
+		try {
+			String sql = "UPDATE OrderInfo SET status = 'C' WHERE order_id="+id;
+			connection=DBConnection.openConnection();
+			preparedStatement=connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+>>>>>>> branch 'master' of https://github.com/Someone871/Mini-Project.git
 		}
 	}
 }
