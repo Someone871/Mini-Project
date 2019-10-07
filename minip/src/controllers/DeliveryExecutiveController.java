@@ -18,6 +18,7 @@ public class DeliveryExecutiveController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	RequestDispatcher dispatcher;     
  
+	int id;
 	DoaInterface userdoa;
 	
     public DeliveryExecutiveController() {
@@ -26,7 +27,9 @@ public class DeliveryExecutiveController extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int id;
+		
+//		request.setAttribute("message", "Saved successfully");
+
 		
 		String action;
 		
@@ -34,7 +37,7 @@ public class DeliveryExecutiveController extends HttpServlet {
 		
 		try {
 			
-			 id=(int) request.getAttribute("id");
+			 id=(int) request.getAttribute("id");	
 			 action =(String) request.getAttribute("action");
 						
 			
@@ -78,11 +81,66 @@ public class DeliveryExecutiveController extends HttpServlet {
 			// Forward request to available_orders.jsp
 			
 				List<ChefCustomer> list=userdoa.getOrderInfo(id);
-		   		request.setAttribute("List",list);
+		   		request.setAttribute("List",list);  		
 		   		dispatcher=request.getRequestDispatcher("DisplayOrderDetails.jsp"); 
 	   	   		dispatcher.forward(request,response);
 		
 			
 		} 
 	}
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		int OrderId=Integer.parseInt(request.getParameter("id"));   //get order_id from the jsp
+		String status=request.getParameter("status");             //get status from the jsp
+		String action=request.getParameter("action");
+		int id=Integer.parseInt(request.getParameter("EmpId"));
+		
+		
+		System.out.println(OrderId);
+		System.out.println(status);
+		
+		if(status.charAt(0)=='C')   //update the status cooking(C) to picked up(D)
+		{
+			userdoa.changeStatus(OrderId, status);
+			if(action.equals("LIST"))
+			{
+				//dispatch the request to listorderinfo.jsp
+				request.setAttribute("message","Order picked up successfully");
+				listOrderInfo(request,response,id);
+			}
+						
+			
+		}
+		
+		
+		else 						//update the status picked up(D) to delivered(Z)
+		{
+			userdoa.changeStatus(OrderId, status);
+			if(action.equals("LIST"))
+			{
+				//dispatch the request to listorderinfo.jsp
+				request.setAttribute("message","Order Delivered successfully");
+				listOrderInfo(request,response,id);
+			}
+			
+		}
+		
+	}
+	
+	
+	public  void listOrderInfo (HttpServletRequest request, HttpServletResponse response,int id) throws ServletException, IOException
+	{
+		
+		List<ChefCustomer> list=userdoa.getOrderInfo(id);
+   		request.setAttribute("List",list);
+   		dispatcher=request.getRequestDispatcher("DisplayOrderDetails.jsp"); 
+	   	dispatcher.forward(request,response);
+		
+	}
+	
+	
+	
+	
 }
