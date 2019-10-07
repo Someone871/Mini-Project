@@ -109,7 +109,7 @@ public class CustomerController extends HttpServlet {
 			// Forward request to ConfirmOrder.jsp
 			request.getRequestDispatcher("ConfirmOrder.jsp").forward(request, response);
 		}
-		else{
+		else if(action.equals("ConfirmOrder")){
 			// action = ConfirmOrder
 			// Attributes Received :- 
 			// id , chef_id, NumOrdered, UnitCost
@@ -122,6 +122,10 @@ public class CustomerController extends HttpServlet {
 			int order_id = userdoa.insertOrder(id, chef_id, NumOrdered, total_cost);
 			
 			System.out.println("Order ID :: "+order_id);
+			
+			request.setAttribute("action","show_profile");
+			request.setAttribute("id",id);
+			request.getRequestDispatcher("CustomerController").forward(request, response);
 			
 		}
 	}
