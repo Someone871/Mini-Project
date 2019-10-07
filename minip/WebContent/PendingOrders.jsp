@@ -24,7 +24,7 @@
 				<td>${order.cust_id}</td>
 				<td>${order.total_cost}</td>
 				<td>
-					<a href = "${pageContext.request.contextPath}/ChefController?action=Accept&id=${order.order_id}">Accept</a>
+					<a href = "${pageContext.request.contextPath}/ChefController?action=Accept&id=${order.chef_id}&o_id=${order.order_id}">Accept</a>
 				</td>
 			</tr>
 		</c:forEach>

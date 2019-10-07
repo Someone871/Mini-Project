@@ -33,10 +33,12 @@ public class ChefController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String action = req.getParameter("action");
-		int o_id = Integer.parseInt(req.getParameter("id"));
+		int o_id = Integer.parseInt(req.getParameter("o_id"));
+		id = Integer.parseInt(req.getParameter("id"));
 		System.out.println("\n\n"+o_id);
 		if(action.equals("Accept")) {
 			chefdoa.acceptOrder(o_id);
+			viewOrderRequests(req,resp);
 		}
 	}
 
@@ -84,11 +86,12 @@ public class ChefController extends HttpServlet {
 		else if(action.equals("ViewOrderRequests")) {
 			
 			//int id = Integer.parseInt(request.getParameter("id"));
-			List<Order> orders = new ArrayList<Order>();
+			/*List<Order> orders = new ArrayList<Order>();
 			orders = chefdoa.getPendingOrders(id);
 			request.setAttribute("id", id);
 			request.setAttribute("orders", orders);
-			request.getRequestDispatcher("PendingOrders.jsp").forward(request, response);
+			request.getRequestDispatcher("PendingOrders.jsp").forward(request, response);*/
+			viewOrderRequests(request,response);
 		}
 		else if(action.equals("ViewAcceptedOrders")) {
 			List<Order> orders = new ArrayList<Order>();
@@ -98,5 +101,12 @@ public class ChefController extends HttpServlet {
 			request.getRequestDispatcher("AcceptedOrders.jsp").forward(request, response);
 		}
 	}
-
+	
+	void viewOrderRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		List<Order> orders = new ArrayList<Order>();
+		orders = chefdoa.getPendingOrders(id);
+		request.setAttribute("id", id);
+		request.setAttribute("orders", orders);
+		request.getRequestDispatcher("PendingOrders.jsp").forward(request, response);
+	}
 }
