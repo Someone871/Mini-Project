@@ -31,4 +31,5 @@ public interface DoaInterface {
 	
 	void acceptOrder(int id);
 	
+	void changeStatus(int id,String status);
 }

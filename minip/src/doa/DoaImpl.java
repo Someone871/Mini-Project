@@ -533,4 +533,37 @@ public class DoaImpl implements DoaInterface{
 			ex.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void changeStatus(int id, String status) {
+		
+		Connection connection=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+
+		try {
+	
+			//update the status 'C' to 'D'
+			if(status.charAt(0)=='C')
+			{
+				connection=DBConnection.openConnection();
+				String sql="UPDATE OrderInfo SET status='D' WHERE order_id="+id+" ";
+				System.out.println(sql);
+				preparedStatement=connection.prepareStatement(sql);
+				preparedStatement.executeUpdate();	
+			}
+			//change the status 'D' to 'Z'
+			else
+			{
+				connection=DBConnection.openConnection();
+				String sql="UPDATE OrderInfo SET status='Z' WHERE order_id="+id+"  ";
+				System.out.println(sql);
+				preparedStatement=connection.prepareStatement(sql);
+				preparedStatement.executeUpdate();
+			}
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}	
+	}
 }

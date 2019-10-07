@@ -11,9 +11,35 @@ public class ChefCustomer {
 	private String CustomerAddress;
 	private int ChefId;
 	private int CustomerId;
+	private String Status;
+	private int OrderId;
+	private int EmpId;
 	
 	
-	
+	public int getEmpId() {
+		return EmpId;
+	}
+
+	public void setEmpId(int empId) {
+		EmpId = empId;
+	}
+
+	public String getStatus() {
+		return Status;
+	}
+
+	public void setStatus(String status) {
+		Status = status;
+	}
+
+	public int getOrderId() {
+		return OrderId;
+	}
+
+	public void setOrderId(int orderId) {
+		OrderId = orderId;
+	}
+
 	public String getChefName() {
 		return ChefName;
 	}
