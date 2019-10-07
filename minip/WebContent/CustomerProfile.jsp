@@ -28,5 +28,8 @@ E-Mail 		  :: ${customer.email}<br>
 	<button type="submit">Order Food</button>
 </form>
 
+<br><br>
+<a href="Login.html">Logout</a>
+
 </body>
 </html>

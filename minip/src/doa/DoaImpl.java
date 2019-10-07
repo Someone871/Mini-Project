@@ -390,6 +390,11 @@ public class DoaImpl implements DoaInterface{
 		
 		try {
 			/* Insert Order into OrderInfo Table */
+			// Insert into OrderInfo
+			// Select Delivery Executive
+			// Set his state to B
+			// chef NumAvl -- 
+			
 			String sql = "INSERT INTO OrderInfo(cust_id,chef_id,status,total_cost,NumOrdered) VALUES("
 					+ id +","
 					+chef_id+","
@@ -400,42 +405,47 @@ public class DoaImpl implements DoaInterface{
 			preparedStatement = connection.prepareStatement(sql);
 			
 			try {
+				// try to insert order into OrderInfo
 				int err = preparedStatement.executeUpdate();
-				if(err==0)
-					return -1;
-	
-				/* Retrieve OrderID */
-				sql = "SELECT LAST_INSERT_ID() AS last";
-				System.out.println(sql);
-				connection = DBConnection.openConnection();
-				preparedStatement = connection.prepareStatement(sql);
-				resultSet = preparedStatement.executeQuery();
-				resultSet.beforeFirst();
-				resultSet.next();
-				int order_id = resultSet.getInt("last");
-				
-				sql = "select min(emp_id) as empid from DeliveryExecutive where state='F'";
-				connection = DBConnection.openConnection();
-				preparedStatement = connection.prepareStatement(sql);
-				resultSet = preparedStatement.executeQuery();
-				resultSet.next();
-				int empid = resultSet.getInt("empid");
-				
-				sql = "update table OrderInfo set emp_id="+empid+"where order_id="+order_id;
-				connection = DBConnection.openConnection();
-				preparedStatement = connection.prepareStatement(sql);
-				preparedStatement.executeUpdate();
-				
-				sql = "update DeliveryExecutive set state='B' where emp_id = "+empid;
-				connection = DBConnection.openConnection();
-				preparedStatement = connection.prepareStatement(sql);
-				preparedStatement.executeUpdate();
-				
-				return order_id;
 			}
 			catch(Exception e) {
+				// If no delivery executives are available
+				e.printStackTrace();
 				return -1;
 			}
+			
+			// Get Order ID
+			sql = "SELECT LAST_INSERT_ID() AS last";
+			System.out.println(sql);
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.beforeFirst();
+			resultSet.next();
+			int order_id = resultSet.getInt("last");
+			System.out.println("order_id :: "+ order_id);
+			
+			// Get Delivery Executive ID
+			sql = "select min(emp_id) as empid from DeliveryExecutive where state='F'";
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			int empid = resultSet.getInt("empid");
+			
+			// Update OrderInfo add DeliveryExecutive ID in Order
+			sql = "update OrderInfo set emp_id="+empid+" where order_id="+order_id;
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			// Set Delivery executive state as B (Busy)
+			sql = "update DeliveryExecutive set state='B' where emp_id = "+empid;
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			return order_id;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
