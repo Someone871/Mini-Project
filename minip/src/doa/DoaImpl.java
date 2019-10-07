@@ -20,7 +20,6 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public String getZone(String area) {
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		try{
@@ -45,7 +44,6 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public int checkuser(String username, String password, String usertype) {
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		try {
@@ -104,7 +102,6 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public void addCustomer(Customer customer,String username,String password) {
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		try {
@@ -146,7 +143,6 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public Customer getCustomerProfile(int id) {
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		try {
@@ -182,7 +178,6 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public DeliveryExecutive getDeliveryExecutiveProfile(int id) {
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		
@@ -219,7 +214,6 @@ public class DoaImpl implements DoaInterface{
 		System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
 		
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		
@@ -268,7 +262,6 @@ public class DoaImpl implements DoaInterface{
 	public Chef getChefProfile(int id) {
 		
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		
@@ -304,8 +297,6 @@ public class DoaImpl implements DoaInterface{
 	public void updateMenu(Chef chef) {
 		
 		Connection connection=null;
-		Statement statement=null;
-		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		
 		try {
@@ -340,7 +331,6 @@ public class DoaImpl implements DoaInterface{
 	@Override
 	public List<ChefCustomer> getOrderInfo(int id) {
 		Connection connection=null;
-		Statement statement=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 		//int count=0;
@@ -350,7 +340,7 @@ public class DoaImpl implements DoaInterface{
 			
 			list=new ArrayList<ChefCustomer>();   //create an array list to add customer and chef details
 
-			String sql1="SELECT * FROM OrderInfo WHERE emp_id="+id+" and status='C' ";
+			String sql1="SELECT * FROM OrderInfo WHERE emp_id="+id+" and (status='C' OR status='D')";
 			System.out.println(sql1);
 			connection = DBConnection.openConnection();
 			preparedStatement = connection.prepareStatement(sql1);
@@ -367,10 +357,8 @@ public class DoaImpl implements DoaInterface{
 				
 				ChefCustomer chefcustomerinfo=new ChefCustomer();
 				
-				
 				Customer customer = getCustomerProfile(cust_id); //get customer profile 
 				Chef chef = getChefProfile(chef_id);             //get chef profile
-				
 				
 				//from customer profile pull name,address and mobno
 				chefcustomerinfo.setCustomerId(cust_id);
@@ -383,17 +371,77 @@ public class DoaImpl implements DoaInterface{
 				chefcustomerinfo.setChefName(chef.getName());
 				chefcustomerinfo.setChefAddress(chef.getAddress());
 				chefcustomerinfo.setChefMobNo(chef.getMobno());
-				
-				
-				
-				list.add(chefcustomerinfo);
-				
+
+				list.add(chefcustomerinfo);	
 				}
-		}catch(SQLException ex)
+		}
+		catch(SQLException ex)
 		{
 			ex.printStackTrace();
-		}
-		
+		}		
 		return list;
+	}
+	
+	
+	
+	@Override
+	public int insertOrder(int id, int chef_id, int NumOrdered, int total_cost) {
+		Connection connection=null;
+		PreparedStatement preparedStatement=null;
+		ResultSet resultSet = null;
+		
+		try {
+			/* Insert Order into OrderInfo Table */
+			String sql = "INSERT INTO OrderInfo(cust_id,chef_id,status,total_cost,NumOrdered) VALUES("
+					+ id +","
+					+chef_id+","
+					+"'W',"
+					+total_cost+","
+					+NumOrdered+")";
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			
+			try {
+				int err = preparedStatement.executeUpdate();
+				if(err==0)
+					return -1;
+	
+				/* Retrieve OrderID */
+				sql = "SELECT LAST_INSERT_ID() AS last";
+				System.out.println(sql);
+				connection = DBConnection.openConnection();
+				preparedStatement = connection.prepareStatement(sql);
+				resultSet = preparedStatement.executeQuery();
+				resultSet.beforeFirst();
+				resultSet.next();
+				int order_id = resultSet.getInt("last");
+				
+				sql = "select min(emp_id) as empid from DeliveryExecutive where state='F'";
+				connection = DBConnection.openConnection();
+				preparedStatement = connection.prepareStatement(sql);
+				resultSet = preparedStatement.executeQuery();
+				resultSet.next();
+				int empid = resultSet.getInt("empid");
+				
+				sql = "update table OrderInfo set emp_id="+empid+"where order_id="+order_id;
+				connection = DBConnection.openConnection();
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.executeUpdate();
+				
+				sql = "update DeliveryExecutive set state='B' where emp_id = "+empid;
+				connection = DBConnection.openConnection();
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.executeUpdate();
+				
+				return order_id;
+			}
+			catch(Exception e) {
+				return -1;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }
