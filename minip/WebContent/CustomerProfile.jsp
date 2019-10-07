@@ -24,7 +24,7 @@ E-Mail 		  :: ${customer.email}<br>
 
 <form method="post" action="CustomerController">
 	<input type="hidden" name="action" value="order_food">
-	<input type="hidden" name="id" value=${customer.cust_id}>
+	<input type="hidden" name="id" value="${customer.cust_id}">
 	<button type="submit">Order Food</button>
 </form>
 

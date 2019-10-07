@@ -12,7 +12,7 @@
 Cuisine:: <input type="text" name="cuisine"><br>
 Tiffin Description:: <input type="text" name="tiff_desc"><br>
 Number of tiffins:: <input type="text" name="num_avl"><br>
-Cost per tiffin:: <input type="text" name="unit_cost">
+Cost per tiffin:: <input type="text" name="unit_cost"><br>
 <input type="hidden" name="action" value="set_menu">
 <%
 String chef_id = session.getAttribute("Chef_id").toString();
@@ -21,5 +21,11 @@ String chef_id = session.getAttribute("Chef_id").toString();
 <input type="submit" name="save_menu">
 </form>
 
+<hr/>
+<form action="ChefController" method="post">
+	<input type="hidden" name="action" value="show_profile">
+	<input type="hidden" name="id" value="<%out.print(chef_id);%>">
+	<input type = "submit" value="Profile Page">
+</form>
 </body>
 </html>
