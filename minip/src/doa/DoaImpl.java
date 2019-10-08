@@ -371,6 +371,8 @@ public class DoaImpl implements DoaInterface{
 				chefcustomerinfo.setChefName(chef.getName());
 				chefcustomerinfo.setChefAddress(chef.getAddress());
 				chefcustomerinfo.setChefMobNo(chef.getMobno());
+				
+				chefcustomerinfo.setStatus(resultSet.getString("status"));
 
 				list.add(chefcustomerinfo);	
 				}
@@ -538,7 +540,6 @@ public class DoaImpl implements DoaInterface{
 	public void changeStatus(int id, String status) {
 		
 		Connection connection=null;
-		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
 
 		try {
