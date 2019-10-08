@@ -7,11 +7,11 @@ import java.sql.SQLException;
 public class DBConnection {
 	// Define Database Properties
 	
-	private static final String url = "jdbc:mysql://localhost:3306/minip";
+	private static final String url = "jdbc:mysql://localhost:3306/dbms";
 	
-	private static final String username = "root";
+	private static final String username = "Rushi";
 	
-	private static final String password = "root";
+	private static final String password = "pict123";
 	
 	private static final String driver = "com.mysql.jdbc.Driver";
 	

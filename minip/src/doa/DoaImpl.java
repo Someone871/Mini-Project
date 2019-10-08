@@ -373,6 +373,8 @@ public class DoaImpl implements DoaInterface{
 				chefcustomerinfo.setChefMobNo(chef.getMobno());
 				
 				chefcustomerinfo.setStatus(resultSet.getString("status"));
+				chefcustomerinfo.setEmpId(id);
+				chefcustomerinfo.setOrderId(resultSet.getInt("order_id"));
 
 				list.add(chefcustomerinfo);	
 				}
