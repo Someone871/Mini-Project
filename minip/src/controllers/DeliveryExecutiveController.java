@@ -132,7 +132,7 @@ public class DeliveryExecutiveController extends HttpServlet {
 	
 	public  void listOrderInfo (HttpServletRequest request, HttpServletResponse response,int id) throws ServletException, IOException
 	{
-		
+		//to list the available orders allocated to the deliveryexecutive
 		List<ChefCustomer> list=userdoa.getOrderInfo(id);
    		request.setAttribute("List",list);
    		dispatcher=request.getRequestDispatcher("DisplayOrderDetails.jsp"); 

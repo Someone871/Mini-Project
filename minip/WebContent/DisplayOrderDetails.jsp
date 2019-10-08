@@ -26,69 +26,28 @@
 	    <th>CustomerMobNo</th>
 	    <th>Message</th>
 	</tr>
-	
-<%
-ArrayList<ChefCustomer> list=(ArrayList) request.getAttribute("List");
-
-for(int i=0;i<list.size();i++)
-{
-	ChefCustomer info=new ChefCustomer();
-	info=list.get(i);
-	
-%>	
-
-<%
-	if(info.getStatus().charAt(0)=='C')
-	{
-%>	
-	<!-- for status C -->
-	<tr>
-
-		
-			<td><%=info.getChefName()%></td>
-			 <td><%=info.getChefAddress()%></td> 
-			<td><%=info.getChefMobNo()%></td>
-			<td><%=info.getCustomerName()%></td>
-			<td><%=info.getCustomerAddress()%></td>
-			<td><%=info.getCustomerMobNo()%></td>
-			<td>
-			<a href="${pageContext.request.contextPath}/DeliveryExecutiveController?id=<%=info.getOrderId()%>&status=<%=info.getStatus()%>&action=LIST&EmpId=<%= info.getEmpId()%>">Delivery Picked Up</a>
-			</td>
-    </tr>	
-	
-<% 		
-	}
-%>
-
-<%
-	if(info.getStatus().charAt(0)=='D')
-	{
-%>
-	<!-- for status D -->
-	<tr>
-
-		
-			<td><%=info.getChefName()%></td>
-			 <td><%=info.getChefAddress()%></td> 
-			<td><%=info.getChefMobNo()%></td>
-			<td><%=info.getCustomerName()%></td>
-			<td><%=info.getCustomerAddress()%></td>
-			<td><%=info.getCustomerMobNo()%></td>
-			<td>
-			<a href="${pageContext.request.contextPath}/DeliveryExecutiveController?id=<%= info.getOrderId()%>&status=<%=info.getStatus()%>&action=LIST&EmpId=<%= info.getEmpId()%>">Package Delivered</a>
-			</td>
-    </tr>	
-	
-	
-<% 	
-	}
-%>
-
-
-		
-<%
-}
-%>
+	<c:forEach items="${List}" var="info">
+		<tr>
+			
+			<td>${info.getChefName()}</td>
+			 <td>${info.getChefAddress()}</td> 
+			<td>${info.getChefMobNo()}</td>
+			<td>${info.getCustomerName()}</td>
+			<td>${info.getCustomerAddress()}</td>
+			<td>${info.getCustomerMobNo()}</td>
+			<c:if test="${info.getStatus() == 'C'}">
+				<td>
+				<a href="${pageContext.request.contextPath}/DeliveryExecutiveController?id=${info.getOrderId()}&status=${info.getStatus()}&action=LIST&EmpId=${info.getEmpId()}">Delivery Picked Up</a>
+				</td>
+			</c:if>
+			<c:if test="${info.getStatus() == 'D'}">
+				<td>
+				<a href="${pageContext.request.contextPath}/DeliveryExecutiveController?id=${info.getOrderId()}&status=${info.getStatus()}&action=LIST&EmpId=${info.getEmpId()}">Package Delivered</a>
+				</td>
+			</c:if>
+			
+		</tr>
+	</c:forEach>
 		
 </table> 
 
