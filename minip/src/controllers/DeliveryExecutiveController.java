@@ -26,30 +26,16 @@ public class DeliveryExecutiveController extends HttpServlet {
     }
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
 //		request.setAttribute("message", "Saved successfully");
-
-		
 		String action;
-		
-
-		
 		try {
-			
 			 id=(int) request.getAttribute("id");	
 			 action =(String) request.getAttribute("action");
-						
-			
 		}catch(Exception ex)
 		{
 			id=Integer.parseInt(request.getParameter("id"));
-			action=request.getParameter("orders");	
-			
+			action=request.getParameter("orders");		
 		}
-
-		
-		
 		if(action.equals("show_profile")) {
 			// Forward request to CustomerProfile.jsp
 			DeliveryExecutive deliveryexecutive = userdoa.getDeliveryExecutiveProfile(id);
@@ -72,20 +58,13 @@ public class DeliveryExecutiveController extends HttpServlet {
 			
 	    	dispatcher=request.getRequestDispatcher("DeliveryExecutive.jsp");
 	    	dispatcher.forward(request,response);
-
-		
-			
-			
 		}
 		else if(action.equals("available_orders")) {
 			// Forward request to available_orders.jsp
-			
-				List<ChefCustomer> list=userdoa.getOrderInfo(id);
-		   		request.setAttribute("List",list);  		
-		   		dispatcher=request.getRequestDispatcher("DisplayOrderDetails.jsp"); 
-	   	   		dispatcher.forward(request,response);
-		
-			
+			List<ChefCustomer> list=userdoa.getOrderInfo(id);
+		   	request.setAttribute("List",list);  		
+		   	dispatcher=request.getRequestDispatcher("DisplayOrderDetails.jsp"); 
+	   	   	dispatcher.forward(request,response);
 		} 
 	}
 
@@ -109,12 +88,8 @@ public class DeliveryExecutiveController extends HttpServlet {
 				//dispatch the request to listorderinfo.jsp
 				request.setAttribute("message","Order picked up successfully");
 				listOrderInfo(request,response,id);
-			}
-						
-			
+			}	
 		}
-		
-		
 		else 						//update the status picked up(D) to delivered(Z)
 		{
 			userdoa.changeStatus(OrderId, status);
@@ -123,13 +98,9 @@ public class DeliveryExecutiveController extends HttpServlet {
 				//dispatch the request to listorderinfo.jsp
 				request.setAttribute("message","Order Delivered successfully");
 				listOrderInfo(request,response,id);
-			}
-			
-		}
-		
+			}	
+		}	
 	}
-	
-	
 	public  void listOrderInfo (HttpServletRequest request, HttpServletResponse response,int id) throws ServletException, IOException
 	{
 		//to list the available orders allocated to the deliveryexecutive
@@ -139,8 +110,4 @@ public class DeliveryExecutiveController extends HttpServlet {
 	   	dispatcher.forward(request,response);
 		
 	}
-	
-	
-	
-	
 }

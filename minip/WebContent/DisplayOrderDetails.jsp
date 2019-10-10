@@ -45,17 +45,9 @@
 				<a href="${pageContext.request.contextPath}/DeliveryExecutiveController?id=${info.getOrderId()}&status=${info.getStatus()}&action=LIST&EmpId=${info.getEmpId()}">Package Delivered</a>
 				</td>
 			</c:if>
-			
 		</tr>
 	</c:forEach>
-		
 </table> 
-
 </div>
-	
-	  
-	  
-
-
 </body>
 </html>

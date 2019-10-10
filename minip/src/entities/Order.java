@@ -8,7 +8,36 @@ public class Order {
 	private String status;
 	private int total_cost;
 	private int NumOrdered;
+	private String chefName;
+	private String delName;
+	private String delContact;
+	private String TiffinDesc;
 	
+	public String getDelName() {
+		return delName;
+	}
+	public void setDelName(String delName) {
+		this.delName = delName;
+	}
+	
+	public String getTiffinDesc() {
+		return TiffinDesc;
+	}
+	public void setTiffinDesc(String tiffinDesc) {
+		TiffinDesc = tiffinDesc;
+	}
+	public String getChefName() {
+		return chefName;
+	}
+	public void setChefName(String chefName) {
+		this.chefName = chefName;
+	}
+	public String getDelContact() {
+		return delContact;
+	}
+	public void setDelContact(String delContact) {
+		this.delContact = delContact;
+	}
 	public int getOrder_id() {
 		return order_id;
 	}
