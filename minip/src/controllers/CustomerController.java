@@ -135,17 +135,16 @@ public class CustomerController extends HttpServlet {
 		//*--------------------- CANCEL ORDER -----------------------*//
 		else if (action.equals("cancel_order")) {
 			
-			int order_id = (int) request.getAttribute("order_id");
-			int emp_id = (int) request.getAttribute("emp_id");
-			int chef_id = (int) request.getAttribute("chef_id");
-			int NumOrdered = (int) request.getAttribute("NumOrdered");
+			int order_id = Integer.parseInt(request.getParameter("order_id"));
+			int emp_id = Integer.parseInt(request.getParameter("emp_id"));
+			int chef_id = Integer.parseInt(request.getParameter("chef_id"));
+			int NumOrdered = Integer.parseInt(request.getParameter("NumOrdered"));
 			
 			System.out.println(order_id);
 			System.out.println(emp_id);
 			System.out.println(chef_id);
 			System.out.println(NumOrdered);
 			
-			/*
 			int err=userdoa.cancelOrder(order_id, emp_id, chef_id, NumOrdered);
 			System.out.println("Cancel Order Returned :: "+err);
 			
@@ -153,7 +152,6 @@ public class CustomerController extends HttpServlet {
 			request.setAttribute("list", list);
 			request.setAttribute("id", id);
 			request.getRequestDispatcher("CurrentOrders.jsp").forward(request, response);
-			*/
 		}
 	}
 }
