@@ -283,6 +283,10 @@ public class DoaImpl implements DoaInterface{
 			chef.setAddress(resultSet.getString("address"));
 			chef.setMobno(resultSet.getString("mobno"));
 			chef.setTiffinDesc(resultSet.getString("TiffinDesc"));
+			chef.setCuisine(resultSet.getString("cuisine"));
+			chef.setNumAvl(resultSet.getInt("NumAvl"));
+			chef.setUnitCost(resultSet.getInt("UnitCost"));
+			chef.setTiffinDesc(resultSet.getString("TiffinDesc"));
 			
 			return chef;
 			
