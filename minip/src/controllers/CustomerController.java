@@ -12,6 +12,7 @@ import doa.DoaImpl;
 import doa.DoaInterface;
 import entities.Chef;
 import entities.Customer;
+import entities.Order;
 
 public class CustomerController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -45,16 +46,7 @@ public class CustomerController extends HttpServlet {
 		//RequestDispatcher dispatcher=null;
 		
 		System.out.println("Action :: "+action);
-		
-		/* Perform the required operation acc. to values of "action" */
-		/*
-		switch(action) {
-			case("order_food"):{
-				
-			}
-				
-		}
-		*/
+		//*----------------------------- SHOW AVAILABLE ORDERS ----------------------------*//
 		if(action.equals("order_food")) {
 			// Get list of chefs the customer can order from
 			List <Chef> list = userdoa.getPotentialOrders(id);
@@ -65,6 +57,7 @@ public class CustomerController extends HttpServlet {
 			// Forward request to OrderFood.jsp
 			request.getRequestDispatcher("OrderFood.jsp").forward(request, response);;
 		}
+		//*---------------------------- SHOW CUSTOMER PROFILE ----------------------------*//
 		else if(action.equals("show_profile")){
 			// Get customer profile and save in Customer object
 			Customer customer = userdoa.getCustomerProfile(id);
@@ -82,9 +75,12 @@ public class CustomerController extends HttpServlet {
 			System.out.println(" Area :: "+customer.getArea());
 			System.out.println("Dispatching to CustomerProfile.jsp");
 			
+			request.setAttribute("id", id);
+			
 			// Forward request to CustomerProfile.jsp
-			request.getRequestDispatcher("CustomerProfile.jsp").forward(request, response);;
+			request.getRequestDispatcher("CustomerProfile.jsp").forward(request, response);
 		}
+		//*--------------------- SELECT ONE ORDER FROM AVAILABLE ---------------------*//
 		else if(action.equals("AddOrder")) {
 			// Action = AddOrder
 			// Attributes Received :-
@@ -109,6 +105,7 @@ public class CustomerController extends HttpServlet {
 			// Forward request to ConfirmOrder.jsp
 			request.getRequestDispatcher("ConfirmOrder.jsp").forward(request, response);
 		}
+		//*----------------------- CONFIRM SELECTED ORDER ------------------------*//
 		else if(action.equals("ConfirmOrder")){
 			// action = ConfirmOrder
 			// Attributes Received :- 
@@ -123,10 +120,38 @@ public class CustomerController extends HttpServlet {
 			
 			System.out.println("Order ID :: "+order_id);
 			
-			request.setAttribute("action","show_profile");
+			request.setAttribute("action","show_current_orders");
 			request.setAttribute("id",id);
 			request.getRequestDispatcher("CustomerController").forward(request, response);
+		}
+		//*----------------- SHOW CURRENT ORDERS --------------------*//
+		else if(action.equals("show_current_orders")) {
+			List<Order> list = userdoa.getCurrentOrders(id);
+			request.setAttribute("list", list);
+			request.setAttribute("id", id);
 			
+			request.getRequestDispatcher("CurrentOrders.jsp").forward(request, response);
+		}
+		//*--------------------- CANCEL ORDER -----------------------*//
+		else if (action.equals("cancel_order")) {
+			
+			int order_id = Integer.parseInt(request.getParameter("order_id"));
+			int emp_id = Integer.parseInt(request.getParameter("emp_id"));
+			int chef_id = Integer.parseInt(request.getParameter("chef_id"));
+			int NumOrdered = Integer.parseInt(request.getParameter("NumOrdered"));
+			
+			System.out.println(order_id);
+			System.out.println(emp_id);
+			System.out.println(chef_id);
+			System.out.println(NumOrdered);
+			
+			int err=userdoa.cancelOrder(order_id, emp_id, chef_id, NumOrdered);
+			System.out.println("Cancel Order Returned :: "+err);
+			
+			List<Order> list = userdoa.getCurrentOrders(id);
+			request.setAttribute("list", list);
+			request.setAttribute("id", id);
+			request.getRequestDispatcher("CurrentOrders.jsp").forward(request, response);
 		}
 	}
 }

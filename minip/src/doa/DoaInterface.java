@@ -32,4 +32,8 @@ public interface DoaInterface {
 	void acceptOrder(int id);
 	
 	void changeStatus(int id,String status);
+	
+	List<Order> getCurrentOrders(int id);
+	
+	int cancelOrder(int order_id,int emp_id,int chef_id,int NumOrdered);
 }

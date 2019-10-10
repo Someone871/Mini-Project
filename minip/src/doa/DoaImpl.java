@@ -282,6 +282,7 @@ public class DoaImpl implements DoaInterface{
 			chef.setName(resultSet.getString("fullname"));
 			chef.setAddress(resultSet.getString("address"));
 			chef.setMobno(resultSet.getString("mobno"));
+			chef.setTiffinDesc(resultSet.getString("TiffinDesc"));
 			
 			return chef;
 			
@@ -326,8 +327,6 @@ public class DoaImpl implements DoaInterface{
 		}
 	}
 	
-
-
 	@Override
 	public List<ChefCustomer> getOrderInfo(int id) {
 		Connection connection=null;
@@ -568,5 +567,73 @@ public class DoaImpl implements DoaInterface{
 		{
 			ex.printStackTrace();
 		}	
+	}
+	
+	/*------------------------- GET ONGOING ORDERS OF CUSTOMER --------------------------- */
+	@Override
+	public List<Order> getCurrentOrders(int id) {
+		List <Order> orders = new ArrayList<Order>();
+		try {
+			String sql = "SELECT * FROM OrderInfo WHERE cust_id="+id+" and status!='Z'";
+			System.out.println(sql);
+			Connection connection = DBConnection.openConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			DeliveryExecutive del = null;
+			Chef chef = null;
+			
+			while(resultSet.next()) {
+				Order order = new Order();
+				order.setCust_id(resultSet.getInt("cust_id"));
+				order.setChef_id(resultSet.getInt("chef_id"));
+				order.setEmp_id(resultSet.getInt("emp_id"));
+				order.setNumOrdered(resultSet.getInt("NumOrdered"));
+				order.setOrder_id(resultSet.getInt("order_id"));
+				order.setStatus(resultSet.getString("status"));
+				order.setTotal_cost(resultSet.getInt("total_cost"));
+				
+				// Profiles of Delivery Executive and Chef associated with Order
+				del = getDeliveryExecutiveProfile(order.getEmp_id());
+				chef = getChefProfile(order.getChef_id());
+				
+				order.setDelName(del.getEmpName());
+				order.setDelContact(del.getEmpMobNo());
+				order.setChefName(chef.getName());
+				order.setTiffinDesc(chef.getTiffinDesc());
+				System.out.println(chef.getTiffinDesc());
+				
+				orders.add(order);
+			}
+			
+			return orders;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public int cancelOrder(int order_id,int emp_id,int chef_id,int NumOrdered) {
+		try {
+			String sql = "UPDATE OrderInfo SET status='X' WHERE order_id="+order_id;
+			Connection connection = DBConnection.openConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			sql = "UPDATE DeliveryExecutive SET state='F' WHERE emp_id="+emp_id;
+			preparedStatement=connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			sql = "UPDATE Chef SET NumAvl = NumAvl+"+NumOrdered+" WHERE chef_id="+chef_id;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			return 1;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }
