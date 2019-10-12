@@ -1,10 +1,10 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Accepted Orders</title>
+<html lang="en">
+  <head>
+    <title>Delivery Executive Details</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!--===============================================================================================-->
@@ -58,7 +58,7 @@
     <link rel="stylesheet" type="text/css" href="css/signupcss.css" />
     <!--===============================================================================================-->
   </head>
-<body>
+  <body>
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -74,7 +74,7 @@
           <li class="nav-item">
             <a
               class="nav-link"
-              href="${pageContext.request.contextPath}/ChefController?action=show_profile&id=${id}"
+              href="#"
               style="font-size: 18px; margin-left: 10px; margin-right: 10px;"
               >Profile</a
             >
@@ -84,26 +84,46 @@
     </nav>
     <!--end of navbar-->
     <div style="margin-top: 100px;">
-      <h2 style="text-align: center;">Accepted Orders</h2>
+      <h2 style="text-align: center;">Delivery Details</h2>
+      <p>${message}</p>	
       <table class="table table-striped" style="margin-top: 30px;">
         <thead>
           <tr>
-            <th scope="col">Order ID</th>
-            <th scope="col">Customer ID</th>
-            <th scope="col">Delivery Executive</th>
-            <th scope="col">Total Cost</th>
+            <th scope="col">Chef Name</th>
+            <th scope="col">Chef Address</th>
+            <th scope="col">Chef Mobile Number</th>
+            <th scope="col">Customer Name</th>
+            <th scope="col">Customer Address</th>
+            <th scope="col">Customer Mobile Number</th>
+            <th scope="col">Message</th>
           </tr>
         </thead>
-        <tbody>
-          <c:forEach items="${orders}" var="order">
-			<tr>
-				<th scope="row">${order.order_id}</th>
-				<td>${order.cust_id}</td>
-				<td>${order.emp_id}</td>
-				<td>${order.total_cost}</td>
-			</tr>
-		</c:forEach>
-        </tbody>
+	<c:forEach items="${List}" var="info">
+            <tbody>
+               <tr>
+
+                  <td>${info.getChefName()}</td>
+                  <td>${info.getChefAddress()}</td>
+                  <td>${info.getChefMobNo()}</td>
+                  <td>${info.getCustomerName()}</td>
+                  <td>${info.getCustomerAddress()}</td>
+                  <td>${info.getCustomerMobNo()}</td>
+                  
+	  <c:if test="${info.getStatus() == 'C' }">
+		<td>
+		<a href="${pageContext.request.contextPath}/DeliveryExecutiveController?id=${info.getOrderId()}&status=${info.getStatus()}&action=LIST&EmpId=${info.getEmpId()}">Delivery Picked Up</a>
+		</td>
+	  </c:if>
+
+	  <c:if test="${info.getStatus() == 'D' }">
+	       <td>
+               <a href="${pageContext.request.contextPath}/DeliveryExecutiveController?id=${info.getOrderId()}&status=${info.getStatus()}&action=LIST&EmpId=${info.getEmpId()}">Package Delivered</a>
+	       </td>
+	 </c:if>
+
+           </tr>
+          </tbody>
+	</c:forEach>
       </table>
     </div>
 
