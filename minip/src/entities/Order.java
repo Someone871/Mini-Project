@@ -12,6 +12,7 @@ public class Order {
 	private String delName;
 	private String delContact;
 	private String TiffinDesc;
+	private String custName;
 	
 	public String getDelName() {
 		return delName;
@@ -79,5 +80,11 @@ public class Order {
 	}
 	public void setNumOrdered(int numOrdered) {
 		NumOrdered = numOrdered;
+	}
+	public String getCustName() {
+		return custName;
+	}
+	public void setCustName(String custName) {
+		this.custName = custName;
 	}
 }
