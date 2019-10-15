@@ -199,6 +199,7 @@ public class DoaImpl implements DoaInterface{
 			deliveryexecutive.setEmpName(resultSet.getString("EmpName"));
 			deliveryexecutive.setWorkZone(resultSet.getString("WorkZone"));
 			deliveryexecutive.setEmpMobNo(resultSet.getString("EmpMobNo"));
+			deliveryexecutive.setRating(resultSet.getInt("Rating"));
 			
 			return deliveryexecutive;
 			

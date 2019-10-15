@@ -5,6 +5,15 @@ public class DeliveryExecutive {
 	private String EmpName;
 	private String WorkZone;
 	private String EmpMobNo;
+	private int Rating;
+
+	public int getRating() {
+		return Rating;
+	}
+
+	public void setRating(int rating) {
+		Rating = rating;
+	}
 
 	public int getEmp_id() {
 		return emp_id;
