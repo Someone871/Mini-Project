@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class DoaImpl implements DoaInterface{
 		Connection connection=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
+		Statement stmt = null;
 		try{
 			String sql = "SELECT Zone FROM Location WHERE Area = '"+area+"'";
 			connection = DBConnection.openConnection();
@@ -30,7 +32,6 @@ public class DoaImpl implements DoaInterface{
 			resultSet.beforeFirst();
 			resultSet.next();
 			String Zone = resultSet.getString("Zone");
-			
 			return Zone;
 		}
 		catch(Exception e) {
