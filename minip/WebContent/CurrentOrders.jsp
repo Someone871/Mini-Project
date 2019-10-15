@@ -41,7 +41,7 @@
 		</div>
 	</nav>
 
-	<div class="d-flex justify-content-center" style="margin-top: 50px;">
+	<div style="margin-top: 50px;">
 		<c:forEach items="${list}" var="order">
 			<div class="card" style="width: 70%;margin-top:20px;">
 		  		<div class="card-header">
@@ -87,6 +87,7 @@
 					</p>
 			  	</div>
 			</div>
+			<br>
 		</c:forEach>
 	</div>
 </body>

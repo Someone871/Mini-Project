@@ -31,9 +31,10 @@
       <li class="nav-item dropdown" data-toggle="dropdown">
       <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#">Search By Cuisine</a>
        <div class="dropdown-menu">
-       <a class="dropdown-item" href="#">Fast Food</a>
-       <a class="dropdown-item" href="#">Lunch</a>
-       <a class="dropdown-item" href="#">Dessert</a>
+       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Indian">Indian</a>
+       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Chinese">Chinese</a>
+       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Italian">Italian</a>
+       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Thai">Thai</a>
        </div>
       </li>
       

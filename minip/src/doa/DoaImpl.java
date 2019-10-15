@@ -556,7 +556,7 @@ public class DoaImpl implements DoaInterface{
 	
 	@Override
 	public void changeStatus(int id, String status) {
-		
+
 		Connection connection=null;
 		PreparedStatement preparedStatement=null;
 
@@ -570,6 +570,12 @@ public class DoaImpl implements DoaInterface{
 				System.out.println(sql);
 				preparedStatement=connection.prepareStatement(sql);
 				preparedStatement.executeUpdate();	
+				
+				//changing the state of DeliveryExecutive from FREE to BUSY state
+				String sql1="UPDATE DeliveryExecutive SET state='B' WHERE emp_id=(select emp_id from OrderInfo where order_id="+id+")";
+				System.out.println(sql1);
+				preparedStatement=connection.prepareStatement(sql1);
+				preparedStatement.executeUpdate();	
 			}
 			//change the status 'D' to 'Z'
 			else
@@ -579,11 +585,19 @@ public class DoaImpl implements DoaInterface{
 				System.out.println(sql);
 				preparedStatement=connection.prepareStatement(sql);
 				preparedStatement.executeUpdate();
+				
+				//changing the state of DeliveryExecutive from BUSY to FREE state
+				String sql2="UPDATE DeliveryExecutive SET state='F' WHERE emp_id=(select emp_id from OrderInfo where order_id="+id+")";
+				System.out.println(sql2);
+				preparedStatement=connection.prepareStatement(sql2);
+				preparedStatement.executeUpdate();
+				
+				
 			}
 		}catch(Exception ex)
 		{
 			ex.printStackTrace();
-		}	
+		}		
 	}
 	
 	/*------------------------- GET ONGOING ORDERS OF CUSTOMER --------------------------- */
@@ -652,5 +666,53 @@ public class DoaImpl implements DoaInterface{
 			e.printStackTrace();
 			return -1;
 		}
+	}
+	
+	@Override
+	public List<Chef> getPotentialOrders(int id, String cuisine) {
+System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
+		
+		Connection connection=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		
+		List<Chef> list = null;
+		Customer customer = getCustomerProfile(id);
+		Chef chef = null;
+		
+		try {
+			list = new ArrayList<Chef>();
+			
+			String sql = "SELECT * FROM Chef WHERE ( cuisine ='"+ cuisine +"' AND NumAvl>0 AND (SELECT Zone from Location where area=Chef.area)='"+getZone(customer.getArea())+"')";
+			System.out.println(sql);
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			int i=0;
+			resultSet.beforeFirst();
+			while(resultSet.next()) {
+				chef = new Chef();
+				chef.setChef_id(resultSet.getInt("chef_id"));
+				chef.setname(resultSet.getString("fullname"));
+				chef.setAddress(resultSet.getString("address"));
+				chef.setArea(resultSet.getString("area"));
+				chef.setMobno(resultSet.getString("mobno"));
+				chef.setCuisine(cuisine);
+				chef.setNumAvl(resultSet.getInt("NumAvl"));
+				chef.setUnitCost(resultSet.getInt("UnitCost"));
+				chef.setTiffinDesc(resultSet.getString("TiffinDesc"));
+				i++;
+				list.add(chef);
+				
+				System.out.println(chef.getChef_id());
+			}
+			System.out.println("\nI = = "+i);
+			
+			return list;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
