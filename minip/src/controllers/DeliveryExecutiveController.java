@@ -31,14 +31,17 @@ public class DeliveryExecutiveController extends HttpServlet {
 		
 		try {
 			
+			 //from servlet
 			 id=(int) request.getAttribute("id");	
 			 action =(String) request.getAttribute("action");
 						
 			
 		}catch(Exception ex)
 		{
+			//from jsp
 			id=Integer.parseInt(request.getParameter("id"));
-			action=request.getParameter("orders");	
+			action=request.getParameter("orders");
+			
 			
 		}
 
@@ -61,7 +64,7 @@ public class DeliveryExecutiveController extends HttpServlet {
 			request.setAttribute("EmpName",deliveryexecutive.getEmpName());
 			request.setAttribute("EmpMobNo",deliveryexecutive.getEmpMobNo());
 			request.setAttribute("WorkZone",deliveryexecutive.getWorkZone());
-			
+			request.setAttribute("Rating", deliveryexecutive.getRating());
 			//request.getRequestDispatcher("DeliveryExecutive.jsp").forward(request, response);
 			
 	    	dispatcher=request.getRequestDispatcher("DeliveryExecutive2.jsp");
@@ -75,7 +78,8 @@ public class DeliveryExecutiveController extends HttpServlet {
 			// Forward request to available_orders.jsp
 			
 				List<ChefCustomer> list=userdoa.getOrderInfo(id);
-		   		request.setAttribute("List",list);  		
+		   		request.setAttribute("List",list);
+		   		request.setAttribute("EmpId", id);
 		   		dispatcher=request.getRequestDispatcher("OrderInfo.jsp"); 
 	   	   		dispatcher.forward(request,response);
 		
@@ -85,44 +89,63 @@ public class DeliveryExecutiveController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		int OrderId=Integer.parseInt(request.getParameter("id"));   //get order_id from the jsp
-		String status=request.getParameter("status");             //get status from the jsp
+	
 		String action=request.getParameter("action");
 		int id=Integer.parseInt(request.getParameter("EmpId"));
 		
-		
-		System.out.println(OrderId);
-		System.out.println(status);
-		
-		if(status.charAt(0)=='C')   //update the status cooking(C) to picked up(D)
+		if(action.equals("show_profile"))
 		{
-			userdoa.changeStatus(OrderId, status);
-			if(action.equals("LIST"))
-			{
-				//dispatch the request to listorderinfo.jsp
-				request.setAttribute("message","Order picked up successfully");
-				listOrderInfo(request,response,id);
-			}
+			DeliveryExecutive deliveryexecutive = userdoa.getDeliveryExecutiveProfile(id);
+			request.setAttribute("deliveryexecutive", deliveryexecutive);
+			request.setAttribute("Emp_id",deliveryexecutive.getEmp_id());
+		    request.setAttribute("EmpName",deliveryexecutive.getEmpName());
+			request.setAttribute("EmpMobNo",deliveryexecutive.getEmpMobNo());
+			request.setAttribute("WorkZone",deliveryexecutive.getWorkZone());
+			request.setAttribute("Rating", deliveryexecutive.getRating());
 						
-			
+			dispatcher=request.getRequestDispatcher("DeliveryExecutive2.jsp");
+	    	dispatcher.forward(request,response);
 		}
 		
-		
-		else 						//update the status picked up(D) to delivered(Z)
+		else
 		{
-			userdoa.changeStatus(OrderId, status);
-			if(action.equals("LIST"))
+			int OrderId=Integer.parseInt(request.getParameter("id"));   //get order_id from the jsp
+			String status=request.getParameter("status");             //get status from the jsp
+
+			
+			
+			System.out.println(OrderId);
+			System.out.println(status);
+			
+			if(status.charAt(0)=='C')   //update the status cooking(C) to picked up(D)
 			{
-				//dispatch the request to listorderinfo.jsp
-				request.setAttribute("message","Order Delivered successfully");
-				listOrderInfo(request,response,id);
+				userdoa.changeStatus(OrderId, status);
+				if(action.equals("LIST"))
+				{
+					//dispatch the request to listorderinfo.jsp
+					request.setAttribute("message","Order picked up successfully");
+					listOrderInfo(request,response,id);
+				}
+							
+				
 			}
 			
+			
+			else 						//update the status picked up(D) to delivered(Z)
+			{
+				userdoa.changeStatus(OrderId, status);
+				if(action.equals("LIST"))
+				{
+					//dispatch the request to listorderinfo.jsp
+					request.setAttribute("message","Order Delivered successfully");
+					listOrderInfo(request,response,id);
+				}
+				
+			}
+
 		}
-		
-		
-		request.getSession(false);
+					
+	
 		
 	}
 	
@@ -132,7 +155,8 @@ public class DeliveryExecutiveController extends HttpServlet {
 		//to list the available orders allocated to the deliveryexecutive
 		List<ChefCustomer> list=userdoa.getOrderInfo(id);
    		request.setAttribute("List",list);
-   		dispatcher=request.getRequestDispatcher("OrderInfo.jsp"); 
+   		request.setAttribute("EmpId", id);
+   		dispatcher=request.getRequestDispatcher("OrderInfo.jsp");
 	   	dispatcher.forward(request,response);
 		
 	}

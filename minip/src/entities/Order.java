@@ -17,6 +17,12 @@ public class Order {
 	public String getDelName() {
 		return delName;
 	}
+	public String getCustName() {
+		return custName;
+	}
+	public void setCustName(String custName) {
+		this.custName = custName;
+	}
 	public void setDelName(String delName) {
 		this.delName = delName;
 	}
@@ -80,11 +86,5 @@ public class Order {
 	}
 	public void setNumOrdered(int numOrdered) {
 		NumOrdered = numOrdered;
-	}
-	public String getCustName() {
-		return custName;
-	}
-	public void setCustName(String custName) {
-		this.custName = custName;
 	}
 }

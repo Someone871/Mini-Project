@@ -88,6 +88,11 @@
                   		<td><b>MobileNumber</b></td>
                   		<td>${EmpMobNo}</td>
                   	</tr>
+                  	
+                  	<tr>
+                  		<td><b>Rating</b></td>
+                  		<td>${Rating}</td>
+                  	</tr>
                   
                   </table>
                  

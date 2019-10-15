@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +16,14 @@ import entities.DeliveryExecutive;
 import entities.Order;
 
 public class DoaImpl implements DoaInterface{
-	
 	/*-------------------------- GET ZONE FROM AREA --------------------------*/
+
 	@Override
 	public String getZone(String area) {
 		Connection connection=null;
 		ResultSet resultSet=null;
 		PreparedStatement preparedStatement=null;
+		Statement stmt = null;
 		try{
 			String sql = "SELECT Zone FROM Location WHERE Area = '"+area+"'";
 			connection = DBConnection.openConnection();
@@ -30,7 +32,6 @@ public class DoaImpl implements DoaInterface{
 			resultSet.beforeFirst();
 			resultSet.next();
 			String Zone = resultSet.getString("Zone");
-			
 			return Zone;
 		}
 		catch(Exception e) {
@@ -98,7 +99,7 @@ public class DoaImpl implements DoaInterface{
 		return -1;
 	}
 	
-	/*-------------------------- CUSTOMER SIGNUP --------------------------*/
+	/*------------------------------------ CUSTOMER SIGNUP --------------------------------------------*/
 	@Override
 	public void addCustomer(Customer customer,String username,String password) {
 		Connection connection=null;
@@ -139,7 +140,7 @@ public class DoaImpl implements DoaInterface{
 		}	
 	}
 	
-	/*-------------------------- RETURN CUSTOMER PROFILE FROM ID --------------------------*/
+	/*---------------------------------------- RETURN CUSTOMER PROFILE FROM ID ------------------------------------------*/
 	@Override
 	public Customer getCustomerProfile(int id) {
 		Connection connection=null;
@@ -174,7 +175,7 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 	
-	/*-------------------------- RETURN DELIVER EXECUTIVE PROFILE --------------------------*/
+	/*----------------------------------------- RETURN DELIVER EXECUTIVE PROFILE -------------------------------------*/
 	@Override
 	public DeliveryExecutive getDeliveryExecutiveProfile(int id) {
 		Connection connection=null;
@@ -198,6 +199,7 @@ public class DoaImpl implements DoaInterface{
 			deliveryexecutive.setEmpName(resultSet.getString("EmpName"));
 			deliveryexecutive.setWorkZone(resultSet.getString("WorkZone"));
 			deliveryexecutive.setEmpMobNo(resultSet.getString("EmpMobNo"));
+			deliveryexecutive.setRating(resultSet.getInt("Rating"));
 			
 			return deliveryexecutive;
 			
@@ -208,7 +210,7 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 	
-	/*-------------------------- SHOW TIFFINS THE CUSTOMER CAN ORDER --------------------------*/
+	/*------------------------------------------- SHOW TIFFINS THE CUSTOMER CAN ORDER ----------------------------------------*/
 	@Override
 	public List<Chef> getPotentialOrders(int id) {
 		System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
@@ -298,7 +300,6 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 
-	/*-------------------------- UPDATE MENU SET BY CHEF --------------------------*/
 	@Override
 	public void updateMenu(Chef chef) {
 		
@@ -332,7 +333,6 @@ public class DoaImpl implements DoaInterface{
 		}
 	}
 	
-	/*--------------------------  --------------------------*/
 	@Override
 	public List<ChefCustomer> getOrderInfo(int id) {
 		Connection connection=null;
@@ -416,7 +416,6 @@ public class DoaImpl implements DoaInterface{
 			try {
 				// try to insert order into OrderInfo
 				int err = preparedStatement.executeUpdate();
-				System.out.println(err);
 			}
 			catch(Exception e) {
 				// If no delivery executives are available
@@ -587,7 +586,7 @@ public class DoaImpl implements DoaInterface{
 		}	
 	}
 	
-	/*-------------------------- GET ONGOING ORDERS OF CUSTOMER -------------------------- */
+	/*------------------------- GET ONGOING ORDERS OF CUSTOMER --------------------------- */
 	@Override
 	public List<Order> getCurrentOrders(int id) {
 		List <Order> orders = new ArrayList<Order>();
