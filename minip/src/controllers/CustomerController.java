@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -49,7 +50,20 @@ public class CustomerController extends HttpServlet {
 		//*----------------------------- SHOW AVAILABLE ORDERS ----------------------------*//
 		if(action.equals("order_food")) {
 			// Get list of chefs the customer can order from
-			List <Chef> list = userdoa.getPotentialOrders(id);
+			String cuisine = new String();
+			List <Chef> list = new ArrayList<Chef>();
+			try {
+				cuisine = request.getParameter("cuisine");
+			}
+			catch(Exception e) {
+				cuisine = "";
+			}
+			if(cuisine.equals("")) {
+				list = userdoa.getPotentialOrders(id);
+			}
+			else {
+				list = userdoa.getPotentialOrders(id,cuisine);
+			}
 			// Set 'id' and 'list' attribute
 			request.setAttribute("id", id);
 			request.setAttribute("list", list);

@@ -36,4 +36,5 @@ public interface DoaInterface {
 	List<Order> getCurrentOrders(int id);
 	
 	int cancelOrder(int order_id,int emp_id,int chef_id,int NumOrdered);
+	List<Chef> getPotentialOrders(int id,String cuisine);
 }
