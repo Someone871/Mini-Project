@@ -469,18 +469,23 @@ public class DoaImpl implements DoaInterface{
 		List<Order> orders = new ArrayList<Order>();
 		try {
 			
-			String sql = "SELECT * FROM OrderInfo WHERE chef_id = "+id+" AND status = 'W'";
+			String sql = "SELECT "
+					+ "OrderInfo.order_id,OrderInfo.total_cost,OrderInfo.NumOrdered,OrderInfo.status,"
+					+ "Customer.fullname,DeliveryExecutive.EmpName "
+					+ "FROM OrderInfo NATURAL JOIN Customer NATURAL JOIN DeliveryExecutive "
+					+ "WHERE OrderInfo.chef_id = ? AND status = 'W'";
 			connection=DBConnection.openConnection();
 			preparedStatement=connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
 				Order order = new Order();
 				
 				order.setOrder_id(resultSet.getInt("order_id"));
-				order.setCust_id(resultSet.getInt("cust_id"));
-				order.setChef_id(resultSet.getInt("chef_id"));
-				order.setEmp_id(resultSet.getInt("emp_id"));
+				order.setCustName(resultSet.getString("fullname"));
+				order.setChef_id(id);
+				order.setDelName(resultSet.getString("EmpName"));
 				order.setStatus(resultSet.getString("status"));
 				order.setTotal_cost(resultSet.getInt("total_cost"));
 				order.setNumOrdered(resultSet.getInt("NumOrdered"));
