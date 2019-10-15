@@ -90,9 +90,7 @@
         <thead>
           <tr>
             <th scope="col">Order ID</th>
-            <th scope="col">Customer Name</th>
-            <th scope="col">Delivery Exec Name</th>
-            <th scope="col">Number ordered</th>
+            <th scope="col">Customer ID</th>
             <th scope="col">Total Cost</th>
             <th scope="col">Action</th>
           </tr>
@@ -101,9 +99,7 @@
           <c:forEach items="${orders}" var="order">
 			<tr>
 				<th scope="row">${order.order_id}</th>
-				<td>${order.custName}</td>
-				<td>${order.delName}</td>
-				<td>${order.numOrdered}</td>
+				<td>${order.cust_id}</td>
 				<td>${order.total_cost}</td>
 				<td>
 					<a href = "${pageContext.request.contextPath}/ChefController?action=Accept&id=${order.chef_id}&o_id=${order.order_id}">Accept</a>
