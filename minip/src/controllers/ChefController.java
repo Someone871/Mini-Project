@@ -31,7 +31,19 @@ public class ChefController extends HttpServlet {
     
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String action = req.getParameter("action");
+		
+		if(action.equals("Accept")) {
+			int o_id = Integer.parseInt(req.getParameter("o_id"));
+			id = Integer.parseInt(req.getParameter("id"));
+			System.out.println("\n\n"+o_id);
+			chefdoa.acceptOrder(o_id);
+			viewOrderRequests(req,resp);
+		}
+		else if(action.equals("show_profile")) {
 			doPost(req,resp);
+		}
 	}
 
 
@@ -53,10 +65,6 @@ public class ChefController extends HttpServlet {
 		else if(action.equals("ViewAcceptedOrders")) {
 			viewAcceptedOrders(request,response);
 		}
-		else if(action.equals("Accept")) {
-			acceptOrder(request,response);
-		}
-		
 	}
 	
 	void showProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -104,13 +112,5 @@ public class ChefController extends HttpServlet {
 		request.setAttribute("id", id);
 		request.setAttribute("orders", orders);
 		request.getRequestDispatcher("AcceptedOrders.jsp").forward(request, response);
-	}
-	
-	void acceptOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int o_id = Integer.parseInt(request.getParameter("o_id"));
-		id = Integer.parseInt(request.getParameter("id"));
-		System.out.println("\n\n"+o_id);
-		chefdoa.acceptOrder(o_id);
-		viewOrderRequests(request,response);
 	}
 }

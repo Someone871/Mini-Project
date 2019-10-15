@@ -15,8 +15,8 @@ import entities.DeliveryExecutive;
 import entities.Order;
 
 public class DoaImpl implements DoaInterface{
-	
 	/*-------------------------- GET ZONE FROM AREA --------------------------*/
+
 	@Override
 	public String getZone(String area) {
 		Connection connection=null;
@@ -98,7 +98,7 @@ public class DoaImpl implements DoaInterface{
 		return -1;
 	}
 	
-	/*-------------------------- CUSTOMER SIGNUP --------------------------*/
+	/*------------------------------------ CUSTOMER SIGNUP --------------------------------------------*/
 	@Override
 	public void addCustomer(Customer customer,String username,String password) {
 		Connection connection=null;
@@ -139,7 +139,7 @@ public class DoaImpl implements DoaInterface{
 		}	
 	}
 	
-	/*-------------------------- RETURN CUSTOMER PROFILE FROM ID --------------------------*/
+	/*---------------------------------------- RETURN CUSTOMER PROFILE FROM ID ------------------------------------------*/
 	@Override
 	public Customer getCustomerProfile(int id) {
 		Connection connection=null;
@@ -174,7 +174,7 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 	
-	/*-------------------------- RETURN DELIVER EXECUTIVE PROFILE --------------------------*/
+	/*----------------------------------------- RETURN DELIVER EXECUTIVE PROFILE -------------------------------------*/
 	@Override
 	public DeliveryExecutive getDeliveryExecutiveProfile(int id) {
 		Connection connection=null;
@@ -208,7 +208,7 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 	
-	/*-------------------------- SHOW TIFFINS THE CUSTOMER CAN ORDER --------------------------*/
+	/*------------------------------------------- SHOW TIFFINS THE CUSTOMER CAN ORDER ----------------------------------------*/
 	@Override
 	public List<Chef> getPotentialOrders(int id) {
 		System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
@@ -298,7 +298,6 @@ public class DoaImpl implements DoaInterface{
 		return null;
 	}
 
-	/*-------------------------- UPDATE MENU SET BY CHEF --------------------------*/
 	@Override
 	public void updateMenu(Chef chef) {
 		
@@ -332,7 +331,6 @@ public class DoaImpl implements DoaInterface{
 		}
 	}
 	
-	/*--------------------------  --------------------------*/
 	@Override
 	public List<ChefCustomer> getOrderInfo(int id) {
 		Connection connection=null;
@@ -416,7 +414,6 @@ public class DoaImpl implements DoaInterface{
 			try {
 				// try to insert order into OrderInfo
 				int err = preparedStatement.executeUpdate();
-				System.out.println(err);
 			}
 			catch(Exception e) {
 				// If no delivery executives are available
@@ -471,23 +468,18 @@ public class DoaImpl implements DoaInterface{
 		List<Order> orders = new ArrayList<Order>();
 		try {
 			
-			String sql = "SELECT "
-					+ "OrderInfo.order_id,OrderInfo.total_cost,OrderInfo.NumOrdered,OrderInfo.status,"
-					+ "Customer.fullname,DeliveryExecutive.EmpName "
-					+ "FROM OrderInfo NATURAL JOIN Customer NATURAL JOIN DeliveryExecutive "
-					+ "WHERE OrderInfo.chef_id = ? AND status = 'W'";
+			String sql = "SELECT * FROM OrderInfo WHERE chef_id = "+id+" AND status = 'W'";
 			connection=DBConnection.openConnection();
 			preparedStatement=connection.prepareStatement(sql);
-			preparedStatement.setInt(1, id);
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
 				Order order = new Order();
 				
 				order.setOrder_id(resultSet.getInt("order_id"));
-				order.setCustName(resultSet.getString("fullname"));
-				order.setChef_id(id);
-				order.setDelName(resultSet.getString("EmpName"));
+				order.setCust_id(resultSet.getInt("cust_id"));
+				order.setChef_id(resultSet.getInt("chef_id"));
+				order.setEmp_id(resultSet.getInt("emp_id"));
 				order.setStatus(resultSet.getString("status"));
 				order.setTotal_cost(resultSet.getInt("total_cost"));
 				order.setNumOrdered(resultSet.getInt("NumOrdered"));
@@ -510,24 +502,18 @@ public class DoaImpl implements DoaInterface{
 		List<Order> orders = new ArrayList<Order>();
 		try {
 			
-			//String sql = "SELECT * FROM OrderInfo WHERE chef_id = "+id+" AND status = 'C'";
-			String sql = "SELECT "
-					+ "OrderInfo.order_id,OrderInfo.total_cost,OrderInfo.NumOrdered,OrderInfo.status,"
-					+ "Customer.fullname,DeliveryExecutive.EmpName "
-					+ "FROM OrderInfo NATURAL JOIN Customer NATURAL JOIN DeliveryExecutive "
-					+ "WHERE OrderInfo.chef_id = ? AND status = 'C'";
+			String sql = "SELECT * FROM OrderInfo WHERE chef_id = "+id+" AND status = 'C'";
 			connection=DBConnection.openConnection();
 			preparedStatement=connection.prepareStatement(sql);
-			preparedStatement.setInt(1, id);
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
 				Order order = new Order();
 				
 				order.setOrder_id(resultSet.getInt("order_id"));
-				order.setCustName(resultSet.getString("fullname"));
-				order.setChef_id(id);
-				order.setDelName(resultSet.getString("EmpName"));
+				order.setCust_id(resultSet.getInt("cust_id"));
+				order.setChef_id(resultSet.getInt("chef_id"));
+				order.setEmp_id(resultSet.getInt("emp_id"));
 				order.setStatus(resultSet.getString("status"));
 				order.setTotal_cost(resultSet.getInt("total_cost"));
 				order.setNumOrdered(resultSet.getInt("NumOrdered"));
@@ -587,7 +573,7 @@ public class DoaImpl implements DoaInterface{
 		}	
 	}
 	
-	/*-------------------------- GET ONGOING ORDERS OF CUSTOMER -------------------------- */
+	/*------------------------- GET ONGOING ORDERS OF CUSTOMER --------------------------- */
 	@Override
 	public List<Order> getCurrentOrders(int id) {
 		List <Order> orders = new ArrayList<Order>();
