@@ -89,8 +89,9 @@
         <thead>
           <tr>
             <th scope="col">Order ID</th>
-            <th scope="col">Customer ID</th>
+            <th scope="col">Customer Name</th>
             <th scope="col">Delivery Executive</th>
+            <th scope="col">Number Ordered</th>
             <th scope="col">Total Cost</th>
           </tr>
         </thead>
@@ -98,8 +99,9 @@
           <c:forEach items="${orders}" var="order">
 			<tr>
 				<th scope="row">${order.order_id}</th>
-				<td>${order.cust_id}</td>
-				<td>${order.emp_id}</td>
+				<td>${order.custName}</td>
+				<td>${order.delName}</td>
+				<td>${order.numOrdered}</td>
 				<td>${order.total_cost}</td>
 			</tr>
 		</c:forEach>
