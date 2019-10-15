@@ -12,9 +12,16 @@ public class Order {
 	private String delName;
 	private String delContact;
 	private String TiffinDesc;
+	private String custName;
 	
 	public String getDelName() {
 		return delName;
+	}
+	public String getCustName() {
+		return custName;
+	}
+	public void setCustName(String custName) {
+		this.custName = custName;
 	}
 	public void setDelName(String delName) {
 		this.delName = delName;
