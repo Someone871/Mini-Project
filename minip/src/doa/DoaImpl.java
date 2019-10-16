@@ -11,6 +11,7 @@ import java.util.List;
 import dbConnection.DBConnection;
 import entities.Chef;
 import entities.ChefCustomer;
+import entities.ChefReport;
 import entities.Customer;
 import entities.DeliveryExecutive;
 import entities.Order;
@@ -290,6 +291,7 @@ public class DoaImpl implements DoaInterface{
 			chef.setNumAvl(resultSet.getInt("NumAvl"));
 			chef.setUnitCost(resultSet.getInt("UnitCost"));
 			chef.setTiffinDesc(resultSet.getString("TiffinDesc"));
+			chef.setRating(resultSet.getInt("Rating"));
 			
 			return chef;
 			
@@ -852,5 +854,44 @@ public class DoaImpl implements DoaInterface{
 			ex.printStackTrace();
 		}		
 		return list;
+	}
+
+	@Override
+	public List<ChefReport> chefReport(int id) {
+		Connection connection=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		ChefReport chefRep = new ChefReport();
+		List<ChefReport> chefReport = new ArrayList<ChefReport>();
+		try {
+			String sql="SELECT COUNT(*) as count,CAST(SUM(total_cost) AS UNSIGNED) as sum FROM OrderInfo"
+					+ " WHERE order_date = CURRENT_DATE AND chef_id = "+id;
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			chefRep.setCount(resultSet.getInt("count"));
+			chefRep.setSum(resultSet.getInt("sum"));
+			chefReport.add(chefRep);
+			
+			sql="SELECT order_date,COUNT(*) AS count,CAST(SUM(total_cost) AS UNSIGNED) AS sum "
+					+ "from (SELECT * FROM OrderInfo WHERE chef_id = "+id+") AS A "
+					+ "GROUP BY order_date";
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				chefRep = new ChefReport();
+				chefRep.setDate(resultSet.getString("order_date"));
+				chefRep.setCount(resultSet.getInt("count"));
+				chefRep.setSum(resultSet.getInt("sum"));
+				
+				chefReport.add(chefRep);
+			}
+			
+			return chefReport;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

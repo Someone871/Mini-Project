@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import doa.DoaImpl;
 import doa.DoaInterface;
 import entities.Chef;
+import entities.ChefReport;
 import entities.Order;
 
 /**
@@ -65,6 +66,9 @@ public class ChefController extends HttpServlet {
 		else if(action.equals("ViewAcceptedOrders")) {
 			viewAcceptedOrders(request,response);
 		}
+		else if(action.equals("ChefReport")) {
+			viewChefReport(request,response);
+		}
 	}
 	
 	void showProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -74,7 +78,6 @@ public class ChefController extends HttpServlet {
 			 id = Integer.parseInt(request.getParameter("id"));
 		 }
 		Chef chef = chefdoa.getChefProfile(id);
-		
 		request.setAttribute("chef", chef);
 		request.setAttribute("Chef_id",chef.getChef_id());
 		
@@ -112,5 +115,16 @@ public class ChefController extends HttpServlet {
 		request.setAttribute("id", id);
 		request.setAttribute("orders", orders);
 		request.getRequestDispatcher("AcceptedOrders.jsp").forward(request, response);
+	}
+	
+	void viewChefReport(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		List<ChefReport> list= new ArrayList<ChefReport>();
+		list = chefdoa.chefReport(id);
+		request.setAttribute("id", id);
+		request.setAttribute("count", list.get(0).getCount());
+		request.setAttribute("sum", list.get(0).getSum());
+		list.remove(0);
+		request.setAttribute("report", list);
+		request.getRequestDispatcher("ChefReport.jsp").forward(request, response);
 	}
 }

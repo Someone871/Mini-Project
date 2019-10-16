@@ -84,6 +84,20 @@
                         value="View Accepted Orders"
                       />
                     </form>
+                    
+                    <form method="post" action="ChefController">
+                      <input
+                        type="hidden"
+                        name="action"
+                        value="ChefReport"
+                      />
+                      <input
+                        type="button"
+                        onClick="this.form.submit()"
+                        class="btn btn-sm btn-default btacc"
+                        value="View Chef Report"
+                      />
+                    </form>
                   	
                   </div>
                 </div>
@@ -108,6 +122,8 @@
                     <b>Address:</b> ${chef.address}<br />
                     <b>Area:</b> ${chef.area}<br />
                     <b>Mobile Number:</b> ${chef.mobno}<br />
+                    <b>Rating:<br />
+                    ${chef.rating}</b>
                   </div>
                 </div>
               </div>

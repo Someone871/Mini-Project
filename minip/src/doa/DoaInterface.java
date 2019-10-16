@@ -4,6 +4,7 @@ import java.util.List;
 
 import entities.Chef;
 import entities.ChefCustomer;
+import entities.ChefReport;
 import entities.Customer;
 import entities.DeliveryExecutive;
 import entities.Order;
@@ -41,4 +42,6 @@ public interface DoaInterface {
 	List<Order> getCustomerOrderHistory(int id);
 	void rateOrder(int order_id,int chef_id,int emp_id,int chef_rating, int del_rating);
 	List<Report> getReport(int id);
+	
+	List<ChefReport> chefReport(int id);
 }
