@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import doa.DoaImpl;
 import doa.DoaInterface;
@@ -30,6 +32,14 @@ public class CustomerController extends HttpServlet {
     }
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		if(session==null) {
+			response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+			out.print("Please Login First");
+			request.getRequestDispatcher("Login.html").include(request, response);
+			out.close();
+		}
 		String action = null;
 		int id = -1;
 		try {
@@ -50,15 +60,9 @@ public class CustomerController extends HttpServlet {
 		//*----------------------------- SHOW AVAILABLE ORDERS ----------------------------*//
 		if(action.equals("order_food")) {
 			// Get list of chefs the customer can order from
-			String cuisine = new String();
+			String cuisine = request.getParameter("cuisine");
 			List <Chef> list = new ArrayList<Chef>();
-			try {
-				cuisine = request.getParameter("cuisine");
-			}
-			catch(Exception e) {
-				cuisine = "";
-			}
-			if(cuisine.equals("")) {
+			if(cuisine==null) {
 				list = userdoa.getPotentialOrders(id);
 			}
 			else {
@@ -166,6 +170,44 @@ public class CustomerController extends HttpServlet {
 			request.setAttribute("list", list);
 			request.setAttribute("id", id);
 			request.getRequestDispatcher("CurrentOrders.jsp").forward(request, response);
+		}
+		//*--------------------- RATE ORDER -----------------------*//
+		else if(action.equals("rate_chef_emp")) {
+			int order_id = Integer.parseInt(request.getParameter("order_id"));
+			int emp_id = Integer.parseInt(request.getParameter("emp_id"));
+			int chef_id = Integer.parseInt(request.getParameter("chef_id"));
+			int chef_rating = Integer.parseInt(request.getParameter("chef_rating"));
+			int del_rating = Integer.parseInt(request.getParameter("del_rating"));
+			
+			System.out.println("--------------- Rating  ---------------");
+			System.out.println(order_id);
+			System.out.println(emp_id);
+			System.out.println(chef_id);
+			System.out.println(chef_rating);
+			System.out.println(del_rating);
+			
+			userdoa.rateOrder(order_id, chef_id, emp_id, chef_rating, del_rating);
+			
+			request.setAttribute("id", id);
+			request.setAttribute("action","show_current_orders");
+			
+			request.getRequestDispatcher("CustomerController").forward(request, response);
+		}
+		//*--------------------- ORDER HISTORY -----------------------*//
+		else if(action.equals("show_order_history")) {
+			List<Order> list = userdoa.getCustomerOrderHistory(id);
+			request.setAttribute("list", list);
+			request.setAttribute("id", id);
+			
+			request.getRequestDispatcher("CustomerOrderHistory.jsp").forward(request, response);
+		}
+		else if(action.equals("go_to_rateOrder")) {
+			request.setAttribute("id", id);
+			request.setAttribute("order_id", request.getParameter("order_id"));
+			request.setAttribute("chef_name", request.getParameter("chef_name"));
+			request.setAttribute("chef_id", request.getParameter("chef_id"));
+			request.setAttribute("emp_id", request.getParameter("emp_id"));
+			request.getRequestDispatcher("RateOrder.jsp").forward(request, response);
 		}
 	}
 }

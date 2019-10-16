@@ -31,9 +31,9 @@
       <li class="nav-item dropdown" data-toggle="dropdown">
       <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#">Search By Cuisine</a>
        <div class="dropdown-menu">
-       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Indian">Indian</a>
-       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Chinese">Chinese</a>
-       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Italian">Italian</a>
+       <a class="dropdown-item" href="${pageContext.request.contextPath}/CustomerController?action=order_food&id=${id}&cuisine=Indian">Indian</a>
+       <a class="dropdown-item" href="${pageContext.request.contextPath}/CustomerController?action=order_food&id=${id}&cuisine=Chinese">Chinese</a>
+       <a class="dropdown-item" href="${pageContext.request.contextPath}/CustomerController?action=order_food&id=${id}&cuisine=Italian">Italian</a>
        <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Thai">Thai</a>
        </div>
       </li>
@@ -55,7 +55,7 @@
 	<!--first card of 6 columns-->
 	<c:forEach items="${list}" var="chef">
 		<div class="col-md-12">
-			<div class="card mb-3 card-design" style="width: 850px; height: 400px;">
+			<div class="card mb-3 card-design" style="width: 700px; height: 370px;margin-left:30%;">
 				<div class="row no-gutters">
 					<div class="col-md-4">
 						<img
@@ -85,7 +85,6 @@
 									</table>
                                 <br />
                                 <p class="descript">${chef.getTiffinDesc()}</p>
-                                </p>
                                 <a href="${pageContext.request.contextPath}/CustomerController?action=AddOrder&
 									id=${id}&chef_id=${chef.getChef_id()}&TiffinDesc=${chef.getTiffinDesc()}
 									&UnitCost=${chef.getUnitCost()}&NumAvl=${chef.getNumAvl()}"
@@ -94,7 +93,6 @@
                                   		ORDER
                                 	</button>
                                 </a>
-                              </p>
 						</div>
 					</div>
 				</div>

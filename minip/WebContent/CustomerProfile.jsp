@@ -68,7 +68,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
                       <input
                         type="hidden"
                         name="action"
-                        value="update_customer_profile"
+                        value="show_order_history"
                       />
                       <input
                         type="hidden"
@@ -79,7 +79,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
                         type="button"
                         onClick="this.form.submit()"
                         class="btn btn-sm btn-default btacc"
-                        value="Update Profile"
+                        value="Order History"
                       />
                     </form>
                   </div>

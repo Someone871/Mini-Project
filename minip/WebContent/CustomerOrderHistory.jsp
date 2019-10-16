@@ -37,9 +37,6 @@
 	      		<li class="nav-item">
 	      			<a class="nav-link text-light font-weight-bold px-3" href="CustomerController?action=order_food&id=${id}">Order Food</a>
 	      		</li>
-	      		<li>
-	      			<a class="nav-link text-light font-weight-bold px-3" href="LogoutController">Logout</a>
-	      		</li>
 	      	</ul>
 		</div>
 	</nav>
@@ -61,35 +58,12 @@
 			    	<p class="card-text">Delivery Executive Name    - ${order.getDelName()}</p>
 			    	<p class="card-text">Delivery Executive Contact - ${order.getDelContact()}</p>
 			    	<p class="card-text">Order Status               - 
-						<c:if test="${order.getStatus() == 'W'}">
-							Waiting for Chef to Accept Order
-							<br>
-							<a href="CustomerController?
-								id=${order.getCust_id()}
-								&action=cancel_order
-								&order_id=${order.getOrder_id()}
-								&emp_id=${order.getEmp_id()}
-								&chef_id=${order.getChef_id()}
-								&NumOrdered=${order.getNumOrdered()}" 
-								class="btn btn-primary"
-							>
-								Cancel Order
-							</a>
-						</c:if>
-						<c:if test="${order.getStatus() == 'C'}">
-							Cooking
-						</c:if>
-						<c:if test="${order.getStatus() == 'D'}">
-							Under Delivery
-						</c:if>
 						<c:if test="${order.getStatus() == 'Z'}">
 							Order Delivered
 							<br>
-							<a href="CustomerController?id=${id}&order_id=${order.getOrder_id()}
-							&chef_name=${order.getChefName()}&del_name=${order.getDelName()}
-							&chef_id=${order.getChef_id()}&emp_id=${order.getEmp_id()}&action=go_to_rateOrder">
-								Rate Order
-							</a>
+							Chef Rating :- ${order.getChefRating()}
+							<br>
+							Delivery Rating :- ${order.getDelRating()}
 						</c:if>
 						<c:if test="${order.getStatus() == 'X'}">
 							Order Cancelled

@@ -37,4 +37,6 @@ public interface DoaInterface {
 	
 	int cancelOrder(int order_id,int emp_id,int chef_id,int NumOrdered);
 	List<Chef> getPotentialOrders(int id,String cuisine);
+	List<Order> getCustomerOrderHistory(int id);
+	void rateOrder(int order_id,int chef_id,int emp_id,int chef_rating, int del_rating);
 }

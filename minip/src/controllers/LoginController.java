@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import doa.DoaImpl;
 import doa.DoaInterface;
@@ -36,6 +37,7 @@ public class LoginController extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("Login.html");
 		}
 		else {
+			HttpSession session = request.getSession(); 
 			if(usertype.equals("cust")){
 				System.out.println("Customer Login successful :: "+id);
 				request.setAttribute("id", id);

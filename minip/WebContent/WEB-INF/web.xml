@@ -4,7 +4,6 @@
   <welcome-file-list>
     <welcome-file>Login.html</welcome-file>
   </welcome-file-list>
- 
   <servlet>
     <description></description>
     <display-name>LoginController</display-name>
@@ -15,7 +14,6 @@
     <servlet-name>LoginController</servlet-name>
     <url-pattern>/LoginController</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>CustomerController</display-name>
@@ -26,7 +24,6 @@
     <servlet-name>CustomerController</servlet-name>
     <url-pattern>/CustomerController</url-pattern>
   </servlet-mapping>
- 
   <servlet>
     <description></description>
     <display-name>CustomerSignup</display-name>
@@ -37,7 +34,6 @@
     <servlet-name>CustomerSignup</servlet-name>
     <url-pattern>/CustomerSignup</url-pattern>
   </servlet-mapping>
- 
   <servlet>
     <description></description>
     <display-name>DeliveryExecutiveController</display-name>
@@ -48,7 +44,6 @@
     <servlet-name>DeliveryExecutiveController</servlet-name>
     <url-pattern>/DeliveryExecutiveController</url-pattern>
   </servlet-mapping>
- 
   <servlet>
     <description></description>
     <display-name>ChefController</display-name>
@@ -59,7 +54,6 @@
     <servlet-name>ChefController</servlet-name>
     <url-pattern>/ChefController</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>SetMenu</display-name>
@@ -69,5 +63,15 @@
   <servlet-mapping>
     <servlet-name>SetMenu</servlet-name>
     <url-pattern>/SetMenu</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LogoutController</display-name>
+    <servlet-name>LogoutController</servlet-name>
+    <servlet-class>controllers.LogoutController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutController</servlet-name>
+    <url-pattern>/LogoutController</url-pattern>
   </servlet-mapping>
 </web-app>
