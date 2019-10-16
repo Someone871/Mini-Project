@@ -13,6 +13,7 @@ import doa.DoaImpl;
 import doa.DoaInterface;
 import entities.ChefCustomer;
 import entities.DeliveryExecutive;
+import entities.Report;
 
 public class DeliveryExecutiveController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -28,23 +29,21 @@ public class DeliveryExecutiveController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		String action;
-		
 		try {
 			
 			 //from servlet
 			 id=(int) request.getAttribute("id");	
 			 action =(String) request.getAttribute("action");
 						
+			 
 			
 		}catch(Exception ex)
 		{
 			//from jsp
 			id=Integer.parseInt(request.getParameter("id"));
 			action=request.getParameter("orders");
-			
-			
+						
 		}
-
 		
 		
 		if(action.equals("show_profile")) {
@@ -85,6 +84,7 @@ public class DeliveryExecutiveController extends HttpServlet {
 		
 			
 		} 
+		
 	}
 
 	@Override
@@ -107,13 +107,21 @@ public class DeliveryExecutiveController extends HttpServlet {
 	    	dispatcher.forward(request,response);
 		}
 		
+		else if(action.equals("ShowReport"))
+		{
+			//forward the request to report.jsp
+			List<Report> list=userdoa.getReport(id);
+			request.setAttribute("List",list);		
+			dispatcher=request.getRequestDispatcher("report.jsp");
+			dispatcher.forward(request, response);
+			
+		}
 		else
 		{
 			int OrderId=Integer.parseInt(request.getParameter("id"));   //get order_id from the jsp
 			String status=request.getParameter("status");             //get status from the jsp
 
-			
-			
+		
 			System.out.println(OrderId);
 			System.out.println(status);
 			

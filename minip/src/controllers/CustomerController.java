@@ -207,6 +207,7 @@ public class CustomerController extends HttpServlet {
 			request.setAttribute("chef_name", request.getParameter("chef_name"));
 			request.setAttribute("chef_id", request.getParameter("chef_id"));
 			request.setAttribute("emp_id", request.getParameter("emp_id"));
+			request.setAttribute("emp_id", request.getParameter("emp_id"));
 			request.getRequestDispatcher("RateOrder.jsp").forward(request, response);
 		}
 	}

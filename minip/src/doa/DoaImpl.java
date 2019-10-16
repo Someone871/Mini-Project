@@ -14,6 +14,7 @@ import entities.ChefCustomer;
 import entities.Customer;
 import entities.DeliveryExecutive;
 import entities.Order;
+import entities.Report;
 
 public class DoaImpl implements DoaInterface{
 	/*-------------------------- GET ZONE FROM AREA --------------------------*/
@@ -816,7 +817,40 @@ public class DoaImpl implements DoaInterface{
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-		}
+		}	
+	}
+	
+	@Override
+	public List <Report> getReport(int id) {
+	
+		Connection connection=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		List<Report> list=null;
+			
+		try {
+			
+			list=new ArrayList<Report>();
+			String sql1="select count(*) as count,Date from (select * from OrderInfo where status='D') as a group by Date";
+			System.out.println(sql1);
+			connection = DBConnection.openConnection();
+			preparedStatement = connection.prepareStatement(sql1);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.beforeFirst();
 		
+			while(resultSet.next())
+			{
+				Report report = new Report();
+				//report.setEmpId(id);
+				report.setDate(resultSet.getString("Date"));
+				report.setCount(resultSet.getInt("count"));
+				list.add(report);
+			}
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
+		}		
+		return list;
 	}
 }
