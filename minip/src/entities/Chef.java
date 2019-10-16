@@ -10,6 +10,8 @@ public class Chef {
 	private Integer UnitCost;
 	private String TiffinDesc;
 	private String Name;
+	private int Rating;
+	
 	public String getName() {
 		return Name;
 	}
@@ -66,5 +68,11 @@ public class Chef {
 	}
 	public void setTiffinDesc(String tiffinDesc) {
 		TiffinDesc = tiffinDesc;
+	}
+	public int getRating() {
+		return Rating;
+	}
+	public void setRating(int rating) {
+		Rating = rating;
 	}
 }
