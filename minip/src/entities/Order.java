@@ -13,7 +13,21 @@ public class Order {
 	private String delContact;
 	private String TiffinDesc;
 	private String custName;
+	private int delRating;
+	private int chefRating;
 	
+	public int getDelRating() {
+		return delRating;
+	}
+	public void setDelRating(int delRating) {
+		this.delRating = delRating;
+	}
+	public int getChefRating() {
+		return chefRating;
+	}
+	public void setChefRating(int chefRating) {
+		this.chefRating = chefRating;
+	}
 	public String getDelName() {
 		return delName;
 	}
@@ -26,7 +40,6 @@ public class Order {
 	public void setDelName(String delName) {
 		this.delName = delName;
 	}
-	
 	public String getTiffinDesc() {
 		return TiffinDesc;
 	}

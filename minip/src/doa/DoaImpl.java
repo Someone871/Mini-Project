@@ -605,7 +605,7 @@ public class DoaImpl implements DoaInterface{
 	public List<Order> getCurrentOrders(int id) {
 		List <Order> orders = new ArrayList<Order>();
 		try {
-			String sql = "SELECT * FROM OrderInfo WHERE cust_id="+id+" and status!='Z'";
+			String sql = "SELECT * FROM OrderInfo WHERE cust_id="+id+" AND order_date = CURDATE() AND delRating = -1 ";
 			System.out.println(sql);
 			Connection connection = DBConnection.openConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -644,6 +644,7 @@ public class DoaImpl implements DoaInterface{
 		}
 	}
 	
+	/*------------------------------- CANCEL ORDER BEFORE CHEF ACCEPTS -------------------------------*/
 	@Override
 	public int cancelOrder(int order_id,int emp_id,int chef_id,int NumOrdered) {
 		try {
@@ -668,9 +669,10 @@ public class DoaImpl implements DoaInterface{
 		}
 	}
 	
+	/*-------------------------- GET CHEFS FROM WHERE CUSTOMER CAN ORDER --------------------------*/
 	@Override
 	public List<Chef> getPotentialOrders(int id, String cuisine) {
-System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
+		System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
 		
 		Connection connection=null;
 		ResultSet resultSet=null;
@@ -683,7 +685,8 @@ System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
 		try {
 			list = new ArrayList<Chef>();
 			
-			String sql = "SELECT * FROM Chef WHERE ( cuisine ='"+ cuisine +"' AND NumAvl>0 AND (SELECT Zone from Location where area=Chef.area)='"+getZone(customer.getArea())+"')";
+			String sql = "SELECT * FROM Chef WHERE ( cuisine ='"+ cuisine 
+					+"' AND NumAvl>0 AND (SELECT Zone from Location where area=Chef.area)='"+getZone(customer.getArea())+"')";
 			System.out.println(sql);
 			connection = DBConnection.openConnection();
 			preparedStatement = connection.prepareStatement(sql);
@@ -714,5 +717,106 @@ System.out.println("\n!!-- Retrieving Potential Orders --!!\n");
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public List<Order> getCustomerOrderHistory(int id) {
+		List <Order> orders = new ArrayList<Order>();
+		try {
+			String sql = "SELECT * FROM OrderInfo WHERE cust_id="+id+
+					" AND ( status='Z' OR status='X' ) AND (order_date <> CURDATE() OR delRating > 0)";
+			System.out.println(sql);
+			Connection connection = DBConnection.openConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			DeliveryExecutive del = null;
+			Chef chef = null;
+			
+			while(resultSet.next()) {
+				Order order = new Order();
+				order.setCust_id(resultSet.getInt("cust_id"));
+				order.setChef_id(resultSet.getInt("chef_id"));
+				order.setEmp_id(resultSet.getInt("emp_id"));
+				order.setNumOrdered(resultSet.getInt("NumOrdered"));
+				order.setOrder_id(resultSet.getInt("order_id"));
+				order.setStatus(resultSet.getString("status"));
+				order.setTotal_cost(resultSet.getInt("total_cost"));
+				order.setDelRating(resultSet.getInt("delRating"));
+				order.setChefRating(resultSet.getInt("chefRating"));
+				
+				// Profiles of Delivery Executive and Chef associated with Order
+				del = getDeliveryExecutiveProfile(order.getEmp_id());
+				chef = getChefProfile(order.getChef_id());
+				
+				order.setDelName(del.getEmpName());
+				order.setDelContact(del.getEmpMobNo());
+				order.setChefName(chef.getName());
+				order.setTiffinDesc(chef.getTiffinDesc());
+				System.out.println(chef.getTiffinDesc());
+				
+				orders.add(order);
+			}
+			
+			return orders;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/* -------------------------------- RATE ORDER -------------------------------- */
+	@Override
+	public void rateOrder(int order_id, int chef_id, int emp_id, int chef_rating, int del_rating) {
+		
+		Connection connection=null;
+		ResultSet resultSet=null;
+		PreparedStatement preparedStatement=null;
+		
+		try {
+			/* ----------- Update OrderInfo Table ----------- */
+			connection = DBConnection.openConnection();
+			String sql = "UPDATE OrderInfo SET delRating = "+del_rating+", chefRating = "+chef_rating
+					+" WHERE order_id = "+order_id;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			/* ----------- Update Chef Rating ----------- */
+			sql = "SELECT Rating,NumOrders from Chef WHERE chef_id = "+chef_id;
+			System.out.println(sql);
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			int Rating = resultSet.getInt("Rating");
+			int NumOrders = resultSet.getInt("NumOrders");
+			
+			Rating = ((Rating * NumOrders)+chef_rating)/(NumOrders+1);
+			NumOrders+=1;
+			
+			sql = "UPDATE Chef SET Rating = "+Rating+" , NumOrders = "+NumOrders+" WHERE chef_id = "+chef_id;
+			System.out.println(sql);
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			
+			/* ----------- Update DeliveryExecutive Rating ----------- */
+			sql = "SELECT Rating,NumOrders from DeliveryExecutive WHERE emp_id = "+emp_id;
+			System.out.println(sql);
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			Rating = resultSet.getInt("Rating");
+			NumOrders = resultSet.getInt("NumOrders");
+			
+			Rating = ((Rating * NumOrders)+del_rating)/(NumOrders+1);
+			NumOrders+=1;
+			
+			sql = "UPDATE DeliveryExecutive SET Rating = "+Rating+" , NumOrders = "+NumOrders+" WHERE emp_id = "+emp_id;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
