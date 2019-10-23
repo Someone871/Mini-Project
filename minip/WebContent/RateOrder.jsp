@@ -34,16 +34,14 @@
 	      			</a>
 	      		</li>
 	      		<li class="nav-item">
-	      			<a class="nav-link text-light font-weight-bold px-3" href="#">Order Food</a>
+	      			<a class="nav-link text-light font-weight-bold px-3" href="CustomerController?id=${id}&action=order_food">Order Food</a>
 	      		</li>
 	      	</ul>
 		</div>
 	</nav>
 	
-	<% String chef_name = request.getParameter("chef_name"); %>
-	
 	<!-- MAIN BODY -->
-	<div style="margin-top:50px;">
+	<div style="margin-top:10%; text-align: center;">
 		<h3>
 			How was the food from ${chef_name} ?
 		</h3>
@@ -85,6 +83,7 @@
 				    <span class="icon">★</span>
 				  </label>
 			  </div>
+			  <br><br>
 			<h2>Rate ${del_name}'s delivery</h2>
 			  <div class="rating">
 		  		<label>
@@ -120,7 +119,7 @@
 			  </div>
 			  <br>
 			  <br>
-			  <button class="btn btn-primary" style="margin-left: 0px;">Submit</button>
+			  <button class="btn btn-primary">Submit</button>
 		</form>
 	</div>
 </body>
