@@ -21,35 +21,31 @@
   <body>
       <!-- navbar -->
  
-<nav class="navbar navbar-expand-md navbar-light bg-dark fixed-top">
- <button type="button" class="navbar-toggler bg-light" data-toggle="collapse" data-target="#nav">
-  <span class="navbar-toggler-icon"></span>
- </button>
-  
- <div class="collapse navbar-collapse justify-content-between" id="nav">
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown" data-toggle="dropdown">
-      <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#">Search By Cuisine</a>
-       <div class="dropdown-menu">
-       <a class="dropdown-item" href="${pageContext.request.contextPath}/CustomerController?action=order_food&id=${id}&cuisine=Indian">Indian</a>
-       <a class="dropdown-item" href="${pageContext.request.contextPath}/CustomerController?action=order_food&id=${id}&cuisine=Chinese">Chinese</a>
-       <a class="dropdown-item" href="${pageContext.request.contextPath}/CustomerController?action=order_food&id=${id}&cuisine=Italian">Italian</a>
-       <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Thai">Thai</a>
-       </div>
-      </li>
-      
-      <li class="nav-item">
-      <a class="nav-link text-light font-weight-bold px-3" href="CustomerController?action=show_profile&id=${id}">
-		Profile
-	  </a>
-      </li>
-     
-      <li class="nav-item">
-      <a class="nav-link text-light font-weight-bold px-3" href="#">Current Orders</a>
-      </li>
-   </ul>
-</div>
-</nav>  
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <!-- Links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link text-light font-weight-bold px-3" href="CustomerController?action=show_profile&id=${id}">Profile</a>
+        </li>
+        
+        <li class="nav-item">
+      		<a class="nav-link text-light font-weight-bold px-3" href="CustomerController?id=${id}&action=show_current_orders">Current Orders</a>
+      	</li>
+    
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Search By Cuisine
+          </a>
+          <div class="dropdown-menu">
+          	<a class="dropdown-item" href="CustomerController?action=order_food&id=${id}">All</a>
+            <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Indian">Indian</a>
+            <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Chinese">Chinese</a>
+            <a class="dropdown-item" href="CustomerController?action=order_food&id=${id}&cuisine=Italian">Italian</a>
+          </div>
+        </li>
+      </ul>
+    </nav>  
 	<!--Each row has one cards-->
 	<div class="row">
 	<!--first card of 6 columns-->
